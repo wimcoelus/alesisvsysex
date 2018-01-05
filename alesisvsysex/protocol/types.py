@@ -1,6 +1,6 @@
 import struct
 
-__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum']
+__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'PadModeEnum', 'SusModeEnum']
 
 class AbstractEnumValue (object):
 
@@ -86,3 +86,9 @@ class ButtonModeEnum (AbstractEnumValue):
         'Momentary CC': 0x01
     }
 
+class SusModeEnum (AbstractEnumValue):
+    
+    _VALUES = {
+        'Switch':         0x00,
+        'Momentary':    0x01
+    }

@@ -3,21 +3,22 @@ import struct
 from alesisvsysex.protocol.types import *
 from alesisvsysex.protocol.component import *
 
-__all__ = ['AlesisV', 'Keys' , 'PitchWheel', 'ModWheel', 'Sustain', 'Knob', 'Knobs', 'Pad', 'Pads', 'Button', 'Buttons']
+__all__ = ['AlesisV', 'Keys' , 'PitchWheel', 'ModWheel', 'Sustain', 'Knob', 'Knobs', 'Pad', 'Pads' ]
     
 class Keys (BasicComponent):
 
     _PARAMS = [
         ('base_note',   IntValue,   [0x0c]),
-        ('octave',      IntValue,   [0x02]),
+        ('octave',      IntValue,   [0x05]),
         ('channel',     IntValue,   [0x00]),
-        ('curve',       IntValue,   [0x00])
+        ('curve',       IntValue,   [0x04])
     ]
 
 class PitchWheel (BasicComponent):
 
     _PARAMS = [
-        ('channel',     IntValue,   [0x00])
+        ('channel',     IntValue,   [0x00]),
+        ('rate',        IntValue,   [0x50])
     ]
 
 class ModWheel (BasicComponent):
@@ -26,12 +27,14 @@ class ModWheel (BasicComponent):
         ('channel',     IntValue,   [0x00]),
         ('cc',          IntValue,   [0x01]),
         ('min',         IntValue,   [0x00]),
-        ('max',         IntValue,   [0x7f])
+        ('max',         IntValue,   [0x7f]),
+        ('rate',        IntValue,   [0x50])
     ]
     
 class Sustain (BasicComponent):
 
     _PARAMS = [
+        ('mode',    SusModeEnum,    [0x00]),
         ('cc',          IntValue,   [0x40]),
         ('min',         IntValue,   [0x00]),
         ('max',         IntValue,   [0x7f]),
@@ -74,30 +77,26 @@ class Pads (CompoundComponent):
         ('pad2', Pad, {'note': IntValue(0x20)}),
         ('pad3', Pad, {'note': IntValue(0x2a)}),
         ('pad4', Pad, {'note': IntValue(0x2e)}),
-        ('pad5', Pad, {'note': IntValue(0x24)}),
-        ('pad6', Pad, {'note': IntValue(0x25)}),
-        ('pad7', Pad, {'note': IntValue(0x26)}),
-        ('pad8', Pad, {'note': IntValue(0x27)})
     ]
 
-class Button (BasicComponent):
+#class Button (BasicComponent):
+#
+#    _PARAMS = [
+#        ('mode',    ButtonModeEnum, [0x00]),
+#        ('cc',      IntValue,       [0xff]), # intentionally invalid
+#        ('on',      IntValue,       [0x7f]),
+#        ('off',     IntValue,       [0x00]),
+#        ('channel', IntValue,       [0x00])
+#    ]
 
-    _PARAMS = [
-        ('mode',    ButtonModeEnum, [0x00]),
-        ('cc',      IntValue,       [0xff]), # intentionally invalid
-        ('on',      IntValue,       [0x7f]),
-        ('off',     IntValue,       [0x00]),
-        ('channel', IntValue,       [0x00])
-    ]
-
-class Buttons (CompoundComponent):
-
-    _COMPONENTS = [
-        ('button1', Button, {'cc': IntValue(0x30)}),
-        ('button2', Button, {'cc': IntValue(0x31)}),
-        ('button3', Button, {'cc': IntValue(0x32)}),
-        ('button4', Button, {'cc': IntValue(0x33)})
-    ]
+#class Buttons (CompoundComponent):
+#
+#    _COMPONENTS = [
+#        ('button1', Button, {'cc': IntValue(0x30)}),
+#        ('button2', Button, {'cc': IntValue(0x31)}),
+#        ('button3', Button, {'cc': IntValue(0x32)}),
+#        ('button4', Button, {'cc': IntValue(0x33)})
+#    ]
 
 class AlesisV (CompoundComponent):
 
@@ -107,7 +106,6 @@ class AlesisV (CompoundComponent):
         ('mwheel',  ModWheel,   {}),
         ('sustain', Sustain,    {}),
         ('knobs',   Knobs,      {}),
-        ('pads',    Pads,       {}),
-        ('buttons', Buttons,    {})
+        ('pads',    Pads,       {})
     ]
 
