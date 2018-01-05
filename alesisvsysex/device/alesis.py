@@ -5,7 +5,7 @@ __all__ = ['AlesisV25Device']
 
 class AlesisV25Device (object):
     
-    _PORT_PREFIX = "V25:V25 MIDI"
+    _PORT_PREFIX = "VMini:VMini MIDI 2"
     
     def __init__(self):
         for port in mido.get_ioport_names():
