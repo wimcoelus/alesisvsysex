@@ -1,0 +1,47 @@
+f0 		Start 
+00 00 0e  	Manufac
+49 61 00 39 	Header    (2nd Bit: 61 Set 62 Query 63 Reply)
+Keybed:
+	0d		Transpose
+	05		Current Octave
+	00		MIDI Channel
+	04		Velocity Curve
+PitchBend
+	00		Channel
+	50		Rate
+Modulation
+	00		Channel
+	01		CC#
+	00		Min
+	7F		Max
+	40		Rate
+Sustain
+        01		Switch / Momentary
+        40		CC#
+	7F		DOWN
+	00		UP
+	00		Channel
+Knobs 1-4
+
+			00: cc 01: Aftertouch
+			CC#
+			Min
+			Max
+			Channel
+00 0e 00 7f 00
+00 0f 00 7f 00
+00 3d 00 7f 00
+00 3e 00 7f 00
+	
+Pads 1-4
+			
+    Operation mode
+        00: Note
+        01: Toggle CC
+        02: Momentary CC
+    Note / CC number
+    Fixed (?) / Minimum CC value
+    Velocity curve / Maximum CC value
+    Channel
+
+00 24 00 00 00
