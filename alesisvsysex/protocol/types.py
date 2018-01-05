@@ -79,12 +79,12 @@ class PadModeEnum (AbstractEnumValue):
         'Momentary CC': 0x02
     }
     
-class ButtonModeEnum (AbstractEnumValue):
-
-    _VALUES = {
-        'Toggle CC':    0x00,
-        'Momentary CC': 0x01
-    }
+#class ButtonModeEnum (AbstractEnumValue):
+#
+#    _VALUES = {
+#        'Toggle CC':    0x00,
+#        'Momentary CC': 0x01
+#    }
 
 class SusModeEnum (AbstractEnumValue):
     

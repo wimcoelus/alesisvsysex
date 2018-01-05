@@ -11,7 +11,7 @@ class SysexMessage (object):
     }
     
     _HEADER_START = [0x00, 0x00, 0x0e, 0x00, 0x49]
-    _HEADER_END   = [0x00, 0x39]
+    _HEADER_END   = [0x00, 0x38]
     
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
