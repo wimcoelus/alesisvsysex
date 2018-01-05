@@ -1,6 +1,12 @@
 # alesisvsysex
 
-Python tool for configuring Alesis V-Series MIDI controllers
+Python tool for configuring Alesis VMini MIDI controllers
+
+I modified the tool to work with the Alesis VMini from the original code that was to do with the V-25.
+
+
+from https://github.com/le1ca/alesisvsysex
+
 
 ![screenshot](https://user-images.githubusercontent.com/978784/32703321-54e548b6-c7b1-11e7-8319-863091dee3d8.png)
 
