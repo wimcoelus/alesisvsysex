@@ -119,7 +119,6 @@ class AlesisVSysexApplication (QMainWindow):
     def __init__(self):
         super().__init__()
         self.model = AlesisV()
-        self.device = AlesisV25Device()
         self.initWindow()
 
     def initWindow(self):
@@ -150,11 +149,13 @@ class AlesisVSysexApplication (QMainWindow):
         self.statusBar().showMessage("Loaded configuration from '%s'." % name)
     
     def saveDevice(self):
-        self.device.set_config(self.model)
+        device = AlesisV25Device()
+        device.set_config(self.model)
         self.statusBar().showMessage("Saved configuration to MIDI device.")
     
     def loadDevice(self):
-        self.model = self.device.get_config()
+        device = AlesisV25Device()
+        self.model = device.get_config()
         self.widget.updateState()
         self.statusBar().showMessage("Loaded configuration from MIDI device.")
 
