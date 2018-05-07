@@ -5,10 +5,12 @@ from alesisvsysex.protocol.model import *
 import unittest
 
 class TestDevice(unittest.TestCase):
+    @unittest.skip("requires connected device")
     def test_v25_constructor(self):
         d = AlesisV25Device()
         assert d._port is not None
 
+    @unittest.skip("requires connected device")
     def test_v25_send_recv(self):
         d = AlesisV25Device()
         m = SysexMessage('query')
@@ -16,11 +18,13 @@ class TestDevice(unittest.TestCase):
         r = d._recv()
         assert isinstance(r.model, AlesisV)
 
+    @unittest.skip("requires connected device")
     def test_v25_get_config(self):
         d = AlesisV25Device()
         r = d.get_config()
         assert isinstance(r, AlesisV)
 
+    @unittest.skip("requires connected device")
     def test_v25_set_config(self):
         d = AlesisV25Device()
         orig = d.get_config()

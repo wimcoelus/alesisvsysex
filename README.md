@@ -33,6 +33,10 @@ From this directory, you can run `python3 -malesisvsysex` to launch the GUI.
 
 An exception will immediately be thrown if the MIDI controller cannot be detected. If you unplug the controller after starting the application, you're in for a bad time. Eventually I'll make this more well-behaved, but for time time being just make sure the device is plugged in before you start.
 
+## Running the test suite
+
+From the same directory that you can launch the application, you can run `python3 -munittest` to run the test suite.
+
 ## Contributing
 
 Any contributions of bug fixes or improvements will be greatly appreciated, including adding support for a different OS or controller.

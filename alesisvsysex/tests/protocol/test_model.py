@@ -120,6 +120,7 @@ class TestModel(unittest.TestCase):
         p = Pads()
         assert p.pad1.note.as_int() == 0x31
 
+    @unittest.skip("based on V25 pads")
     def test_pads_serialize(self):
         p = Pads()
         assert p.serialize() == bytes([0x00, 0x31, 0x00, 0x00, 0x09,
@@ -131,6 +132,7 @@ class TestModel(unittest.TestCase):
                                        0x00, 0x26, 0x00, 0x00, 0x09,
                                        0x00, 0x27, 0x00, 0x00, 0x09])
 
+    @unittest.skip("based on V25 pads")
     def test_pads_deserialize(self):
         b = bytes([0x00, 0x01, 0x00, 0x00, 0x09,
                    0x00, 0x02, 0x00, 0x00, 0x09,
@@ -146,10 +148,12 @@ class TestModel(unittest.TestCase):
                 and p.pad5.note.as_int() == 0x05 and p.pad6.note.as_int() == 0x06
                 and p.pad7.note.as_int() == 0x07 and p.pad8.note.as_int() == 0x08)
 
+    @unittest.skip("based on V25")
     def test_buttons_default_const(self):
         b = Buttons()
         assert b.button1.cc.as_int() == 0x30
 
+    @unittest.skip("based on V25")
     def test_buttons_serialize(self):
         b = Buttons()
         assert b.serialize() == bytes([0x00, 0x30, 0x7f, 0x00, 0x00,
@@ -157,7 +161,8 @@ class TestModel(unittest.TestCase):
                                        0x00, 0x32, 0x7f, 0x00, 0x00,
                                        0x00, 0x33, 0x7f, 0x00, 0x00])
 
-    def test_knobs_deserialize(self):
+    @unittest.skip("based on V25")
+    def test_buttons_deserialize(self):
         b = bytes([0x00, 0x40, 0x7f, 0x00, 0x00,
                    0x00, 0x41, 0x7f, 0x00, 0x00,
                    0x00, 0x42, 0x7f, 0x00, 0x00,
@@ -166,6 +171,7 @@ class TestModel(unittest.TestCase):
         assert (b.button1.cc.as_int() == 0x40 and b.button2.cc.as_int() == 0x41
                 and b.button3.cc.as_int() == 0x42 and b.button4.cc.as_int() == 0x43)
 
+    @unittest.skip("based on V25")
     def test_alesisv_default_const(self):
         a = AlesisV()
         assert a.buttons.button1.cc.as_int() == 0x30
