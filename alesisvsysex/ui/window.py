@@ -111,11 +111,12 @@ class MainWidget (QWidget):
     def updateState(self):
         self.editorWidget.updateState()
 
-class AlesisVSysexApplication (QMainWindow):
+class AlesisVSysexMainWindow (QMainWindow):
 
-    def __init__(self):
+    def __init__(self, delegate, model):
         super().__init__()
-        self.model = AlesisV()
+        self.delegate = delegate
+        self.model = model
         self.initWindow()
 
     def showStatusMessage(self, message):
@@ -128,15 +129,28 @@ class AlesisVSysexApplication (QMainWindow):
         self.show()
         
     def initWidget(self):
-        self.widget = MainWidget(self, self)
+        self.widget = MainWidget(self, self.delegate)
         self.setCentralWidget(self.widget)
 
     def setModel(self, model):
         self.model = model
         self.widget.updateState()
 
+class AlesisVSysexApplication:
+
+    def __init__(self):
+        self.model = AlesisV()
+        self.mainWindow = AlesisVSysexMainWindow(self, self.model)
+
+    def setModel(self, model):
+        self.model = model
+        self.mainWindow.setModel(model)
+
+    def showStatusMessage(self, message):
+        self.mainWindow.showStatusMessage(message)
+
     def saveFile(self):
-        launchSaveFileDialog(self, self)
+        launchSaveFileDialog(self.mainWindow, self)
     
     def saveFileCallback(self, name):
         f = FileDevice(name)
@@ -144,7 +158,7 @@ class AlesisVSysexApplication (QMainWindow):
         self.showStatusMessage("Saved configuration to '%s'." % name)
     
     def loadFile(self):
-        launchLoadFileDialog(self, self)
+        launchLoadFileDialog(self.mainWindow, self)
         
     def loadFileCallback(self, name):
         f = FileDevice(name)
