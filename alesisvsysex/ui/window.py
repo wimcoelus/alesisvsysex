@@ -129,7 +129,7 @@ class AlesisVSysexApplication (QMainWindow):
         self.setCentralWidget(self.widget)
         
     def saveFile(self):
-        launchSaveFileDialog(self)
+        launchSaveFileDialog(self, self)
     
     def saveFileCallback(self, name):
         f = FileDevice(name)
@@ -137,7 +137,7 @@ class AlesisVSysexApplication (QMainWindow):
         self.statusBar().showMessage("Saved configuration to '%s'." % name)
     
     def loadFile(self):
-        launchLoadFileDialog(self)
+        launchLoadFileDialog(self, self)
         
     def loadFileCallback(self, name):
         f = FileDevice(name)
