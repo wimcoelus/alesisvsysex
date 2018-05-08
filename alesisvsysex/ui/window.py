@@ -118,23 +118,26 @@ class AlesisVSysexApplication (QMainWindow):
         self.model = AlesisV()
         self.initWindow()
 
+    def showStatusMessage(self, message):
+        self.statusBar().showMessage(message)
+
     def initWindow(self):
         self.setWindowTitle('Alesis V-Series SysEx Editor')
         self.initWidget()
-        self.statusBar().showMessage('Ready.')
+        self.showStatusMessage('Ready.')
         self.show()
         
     def initWidget(self):
         self.widget = MainWidget(self, self)
         self.setCentralWidget(self.widget)
-        
+
     def saveFile(self):
         launchSaveFileDialog(self, self)
     
     def saveFileCallback(self, name):
         f = FileDevice(name)
         f.set_config(self.model)
-        self.statusBar().showMessage("Saved configuration to '%s'." % name)
+        self.showStatusMessage("Saved configuration to '%s'." % name)
     
     def loadFile(self):
         launchLoadFileDialog(self, self)
@@ -143,16 +146,16 @@ class AlesisVSysexApplication (QMainWindow):
         f = FileDevice(name)
         self.model = f.get_config()
         self.widget.updateState()
-        self.statusBar().showMessage("Loaded configuration from '%s'." % name)
+        self.showStatusMessage("Loaded configuration from '%s'." % name)
     
     def saveDevice(self):
         device = AlesisV25Device()
         device.set_config(self.model)
-        self.statusBar().showMessage("Saved configuration to MIDI device.")
+        self.showStatusMessage("Saved configuration to MIDI device.")
     
     def loadDevice(self):
         device = AlesisV25Device()
         self.model = device.get_config()
         self.widget.updateState()
-        self.statusBar().showMessage("Loaded configuration from MIDI device.")
+        self.showStatusMessage("Loaded configuration from MIDI device.")
 
