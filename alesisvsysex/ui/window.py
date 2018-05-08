@@ -9,36 +9,32 @@ __all__ = ['AlesisVSysexApplication']
 
 class ActionMenuWidget (QWidget):
 
-    def __init__(self, parent):
+    def __init__(self, parent, delegate):
         super().__init__(parent)
+        self.delegate = delegate
         self.initLayout()
     
     def initLayout(self):
         layout = QHBoxLayout()
         
         bsavef = QPushButton('Save To File', self)
-        bsavef.clicked.connect(self.propagateCommand('saveFile'))
+        bsavef.clicked.connect(self.delegate.saveFile)
         layout.addWidget(bsavef)
         
         bloadf = QPushButton('Load From File', self)
-        bloadf.clicked.connect(self.propagateCommand('loadFile'))
+        bloadf.clicked.connect(self.delegate.loadFile)
         layout.addWidget(bloadf)
         
         bsaved = QPushButton('Save To Device', self)
-        bsaved.clicked.connect(self.propagateCommand('saveDevice'))
+        bsaved.clicked.connect(self.delegate.saveDevice)
         layout.addWidget(bsaved)
         
         bloadd = QPushButton('Load From Device', self)
-        bloadd.clicked.connect(self.propagateCommand('loadDevice'))
+        bloadd.clicked.connect(self.delegate.loadDevice)
         layout.addWidget(bloadd)
         
         self.setLayout(layout)
         self.setFixedHeight(50)
-    
-    def propagateCommand(self, command):
-        def closure():
-            getattr(self.parent().parent(), command)()
-        return closure
 
 class ContainerWidget (QWidget):
 
@@ -99,13 +95,14 @@ class EditorWidget (QTabWidget):
 
 class MainWidget (QWidget):
     
-    def __init__(self, parent):
+    def __init__(self, parent, delegate):
         super().__init__(parent)
+        self.delegate = delegate
         self.initLayout()
     
     def initLayout(self):
         layout = QVBoxLayout()
-        self.actionWidget = ActionMenuWidget(self)
+        self.actionWidget = ActionMenuWidget(self, self.delegate)
         layout.addWidget(self.actionWidget)
         self.editorWidget = EditorWidget(self)
         layout.addWidget(self.editorWidget)
@@ -128,7 +125,7 @@ class AlesisVSysexApplication (QMainWindow):
         self.show()
         
     def initWidget(self):
-        self.widget = MainWidget(self)
+        self.widget = MainWidget(self, self)
         self.setCentralWidget(self.widget)
         
     def saveFile(self):
