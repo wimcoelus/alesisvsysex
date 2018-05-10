@@ -10,20 +10,24 @@ class BasicWidget (QGroupBox):
         self.componentName = name
         self.componentKey = component_key
         self.children = []
+        self.childNames = []
+        self.createChildren()
         self.initLayout()
-    
-    def initLayout(self):
-        layout = QFormLayout()
-        
+
+    def createChildren(self):
         for field, cls, _ in self.getModel()._PARAMS:
             fieldName = QLabel(field)
             if issubclass(cls, IntValue):
                 fieldValue = IntegerSelector(self, field)
             elif issubclass(cls, AbstractEnumValue):
                 fieldValue = EnumSelector(self, field)
+            self.childNames.append(fieldName)
             self.children.append(fieldValue)
+
+    def initLayout(self):
+        layout = QFormLayout()
+        for fieldName, fieldValue in zip(self.childNames, self.children):
             layout.addRow(fieldName, fieldValue)
-        
         self.setLayout(layout)
         
     def updateState(self):
@@ -43,14 +47,10 @@ class CompoundWidget (QGroupBox):
         self.componentName = name
         self.componentKey = component_key
         self.children = []
+        self.createChildren()
         self.initLayout()
-    
-    def initLayout(self):
-        layout = QGridLayout()
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(1, 1)
-        layout.setColumnStretch(2, 1)
-        layout.setColumnStretch(3, 1)
+
+    def createChildren(self):
         for name, _, __ in self.getModel()._COMPONENTS:
             model = self.getModel()._components[name]
             if isinstance(model, BasicComponent):
@@ -58,6 +58,14 @@ class CompoundWidget (QGroupBox):
             elif isinstance(model, CompoundComponent):
                 widget = CompoundWidget(self, name, name)
             self.children.append(widget)
+
+    def initLayout(self):
+        layout = QGridLayout()
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 1)
+        layout.setColumnStretch(2, 1)
+        layout.setColumnStretch(3, 1)
+        for widget in self.children:
             layout.addWidget(widget)
         self.setLayout(layout)
 
