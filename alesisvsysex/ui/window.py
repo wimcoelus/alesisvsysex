@@ -74,8 +74,7 @@ class MainWidget (QWidget):
     def __init__(self, parent, delegate, model):
         super().__init__(parent)
         self.delegate = delegate
-        self.model = model
-        self.initLayout()
+        self.initLayout(model)
 
     def createActionMenu(self):
         actionMenu = QWidget(self)
@@ -102,16 +101,15 @@ class MainWidget (QWidget):
 
         return actionMenu
 
-    def initLayout(self):
+    def initLayout(self, model):
         layout = QVBoxLayout()
         self.actionWidget = self.createActionMenu()
         layout.addWidget(self.actionWidget)
-        self.editorWidget = EditorWidget(self, self.model)
+        self.editorWidget = EditorWidget(self, model)
         layout.addWidget(self.editorWidget)
         self.setLayout(layout)
 
     def setModel(self, model):
-        self.model = model
         self.editorWidget.setModel(model)
 
 class AlesisVSysexMainWindow (QMainWindow):
@@ -119,24 +117,22 @@ class AlesisVSysexMainWindow (QMainWindow):
     def __init__(self, delegate, model):
         super().__init__()
         self.delegate = delegate
-        self.model = model
-        self.initWindow()
+        self.initWindow(model)
 
     def showStatusMessage(self, message):
         self.statusBar().showMessage(message)
 
-    def initWindow(self):
+    def initWindow(self, model):
         self.setWindowTitle('Alesis V-Series SysEx Editor')
-        self.initWidget()
+        self.initWidget(model)
         self.showStatusMessage('Ready.')
         self.show()
         
-    def initWidget(self):
-        self.widget = MainWidget(self, self.delegate, self.model)
+    def initWidget(self, model):
+        self.widget = MainWidget(self, self.delegate, model)
         self.setCentralWidget(self.widget)
 
     def setModel(self, model):
-        self.model = model
         self.widget.setModel(model)
 
 class AlesisVSysexApplication:
