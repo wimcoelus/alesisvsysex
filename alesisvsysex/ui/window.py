@@ -20,9 +20,10 @@ class ContainerWidget (QWidget):
 
 class EditorWidget (QTabWidget):
 
-    def __init__(self, parent):
+    def __init__(self, parent, model):
         super().__init__(parent)
         self.children = []
+        self.model = model
         self.initLayout()
         
     def addChild(self, parent, widget):
@@ -58,7 +59,11 @@ class EditorWidget (QTabWidget):
         self.addTab(pane3, "Pads")
 
     def getModel(self):
-        return self.parentWidget().parentWidget().model
+        return self.model
+
+    def setModel(self, model):
+        self.model = model
+        self.updateState()
         
     def updateState(self):
         for c in self.children:
@@ -101,16 +106,13 @@ class MainWidget (QWidget):
         layout = QVBoxLayout()
         self.actionWidget = self.createActionMenu()
         layout.addWidget(self.actionWidget)
-        self.editorWidget = EditorWidget(self)
+        self.editorWidget = EditorWidget(self, self.model)
         layout.addWidget(self.editorWidget)
         self.setLayout(layout)
 
     def setModel(self, model):
         self.model = model
-        self.updateState()
-
-    def updateState(self):
-        self.editorWidget.updateState()
+        self.editorWidget.setModel(model)
 
 class AlesisVSysexMainWindow (QMainWindow):
 
