@@ -112,41 +112,27 @@ class MainWidget (QWidget):
     def setModel(self, model):
         self.editorWidget.setModel(model)
 
-class AlesisVSysexMainWindow (QMainWindow):
-
-    def __init__(self, delegate, model):
-        super().__init__()
-        self.delegate = delegate
-        self.initWindow(model)
-
-    def showStatusMessage(self, message):
-        self.statusBar().showMessage(message)
-
-    def initWindow(self, model):
-        self.setWindowTitle('Alesis V-Series SysEx Editor')
-        self.initWidget(model)
-        self.showStatusMessage('Ready.')
-        self.show()
-        
-    def initWidget(self, model):
-        self.widget = MainWidget(self, self.delegate, model)
-        self.setCentralWidget(self.widget)
-
-    def setModel(self, model):
-        self.widget.setModel(model)
-
 class AlesisVSysexApplication:
 
     def __init__(self):
         self.model = AlesisV()
-        self.mainWindow = AlesisVSysexMainWindow(self, self.model)
+        self.initMainWindow()
+
+    def initMainWindow(self):
+        self.mainWindow = QMainWindow()
+        self.statusBar = self.mainWindow.statusBar()
+        self.mainWindow.setWindowTitle('Alesis V-Series SysEx Editor')
+        self.mainWidget = MainWidget(self.mainWindow, self, self.model)
+        self.mainWindow.setCentralWidget(self.mainWidget)
+        self.showStatusMessage('Ready.')
+        self.mainWindow.show()
 
     def setModel(self, model):
         self.model = model
-        self.mainWindow.setModel(model)
+        self.mainWidget.setModel(model)
 
     def showStatusMessage(self, message):
-        self.mainWindow.showStatusMessage(message)
+        self.statusBar.showMessage(message)
 
     def saveFile(self):
         launchSaveFileDialog(self.mainWindow, self)
