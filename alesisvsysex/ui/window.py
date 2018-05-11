@@ -69,31 +69,30 @@ class EditorWidget (QTabWidget):
         for c in self.children:
             c.updateState()
 
-class MainWidget (QWidget):
-    
-    def __init__(self, parent, delegate, model):
-        super().__init__(parent)
-        self.delegate = delegate
-        self.initLayout(model)
+class AlesisVSysexApplication:
+
+    def __init__(self):
+        self.model = AlesisV()
+        self.initMainWindow()
 
     def createActionMenu(self):
-        actionMenu = QWidget(self)
+        actionMenu = QWidget(self.mainWidget)
         layout = QHBoxLayout()
 
         bsavef = QPushButton('Save To File', actionMenu)
-        bsavef.clicked.connect(self.delegate.saveFile)
+        bsavef.clicked.connect(self.saveFile)
         layout.addWidget(bsavef)
 
         bloadf = QPushButton('Load From File', actionMenu)
-        bloadf.clicked.connect(self.delegate.loadFile)
+        bloadf.clicked.connect(self.loadFile)
         layout.addWidget(bloadf)
 
         bsaved = QPushButton('Save To Device', actionMenu)
-        bsaved.clicked.connect(self.delegate.saveDevice)
+        bsaved.clicked.connect(self.saveDevice)
         layout.addWidget(bsaved)
 
         bloadd = QPushButton('Load From Device', actionMenu)
-        bloadd.clicked.connect(self.delegate.loadDevice)
+        bloadd.clicked.connect(self.loadDevice)
         layout.addWidget(bloadd)
 
         actionMenu.setLayout(layout)
@@ -101,35 +100,26 @@ class MainWidget (QWidget):
 
         return actionMenu
 
-    def initLayout(self, model):
+    def initMainWidget(self):
+        self.mainWidget = QWidget(self.mainWindow)
         layout = QVBoxLayout()
-        self.actionWidget = self.createActionMenu()
-        layout.addWidget(self.actionWidget)
-        self.editorWidget = EditorWidget(self, model)
+        layout.addWidget(self.createActionMenu())
+        self.editorWidget = EditorWidget(self.mainWidget, self.model)
         layout.addWidget(self.editorWidget)
-        self.setLayout(layout)
-
-    def setModel(self, model):
-        self.editorWidget.setModel(model)
-
-class AlesisVSysexApplication:
-
-    def __init__(self):
-        self.model = AlesisV()
-        self.initMainWindow()
+        self.mainWidget.setLayout(layout)
 
     def initMainWindow(self):
         self.mainWindow = QMainWindow()
         self.statusBar = self.mainWindow.statusBar()
         self.mainWindow.setWindowTitle('Alesis V-Series SysEx Editor')
-        self.mainWidget = MainWidget(self.mainWindow, self, self.model)
+        self.initMainWidget()
         self.mainWindow.setCentralWidget(self.mainWidget)
         self.showStatusMessage('Ready.')
         self.mainWindow.show()
 
     def setModel(self, model):
         self.model = model
-        self.mainWidget.setModel(model)
+        self.editorWidget.setModel(model)
 
     def showStatusMessage(self, message):
         self.statusBar.showMessage(message)
