@@ -66,9 +66,10 @@ class EditorWidget (QTabWidget):
 
 class MainWidget (QWidget):
     
-    def __init__(self, parent, delegate):
+    def __init__(self, parent, delegate, model):
         super().__init__(parent)
         self.delegate = delegate
+        self.model = model
         self.initLayout()
 
     def createActionMenu(self):
@@ -103,7 +104,11 @@ class MainWidget (QWidget):
         self.editorWidget = EditorWidget(self)
         layout.addWidget(self.editorWidget)
         self.setLayout(layout)
-    
+
+    def setModel(self, model):
+        self.model = model
+        self.updateState()
+
     def updateState(self):
         self.editorWidget.updateState()
 
@@ -125,12 +130,12 @@ class AlesisVSysexMainWindow (QMainWindow):
         self.show()
         
     def initWidget(self):
-        self.widget = MainWidget(self, self.delegate)
+        self.widget = MainWidget(self, self.delegate, self.model)
         self.setCentralWidget(self.widget)
 
     def setModel(self, model):
         self.model = model
-        self.widget.updateState()
+        self.widget.setModel(model)
 
 class AlesisVSysexApplication:
 
