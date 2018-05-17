@@ -67,7 +67,7 @@ class EditorWidget (QTabWidget):
         
     def updateState(self):
         for c in self.children:
-            c.updateState()
+            c.setModel(self.model)
 
 class AlesisVSysexApplication:
 

@@ -33,8 +33,8 @@ class BasicWidget (QGroupBox):
             layout.addRow(fieldName, fieldValue)
         self.setLayout(layout)
         
-    def updateState(self):
-        self.model = getattr(self.parent().getModel(), self.componentKey)
+    def setModel(self, model):
+        self.model = getattr(model, self.componentKey)
         for c in self.children:
             c.setModel(self.model)
 
@@ -73,10 +73,10 @@ class CompoundWidget (QGroupBox):
             layout.addWidget(widget)
         self.setLayout(layout)
 
-    def updateState(self):
-        self.model = getattr(self.parent().getModel(), self.componentKey)
+    def setModel(self, model):
+        self.model = getattr(model, self.componentKey)
         for c in self.children:
-            c.updateState()
+            c.setModel(self.model)
 
     def getModel(self):
         return self.model
