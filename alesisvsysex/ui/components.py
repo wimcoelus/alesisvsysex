@@ -47,6 +47,7 @@ class CompoundWidget (QGroupBox):
             super().__init__(parent)
         self.componentName = name
         self.componentKey = component_key
+        self.model = getattr(parent.getModel(), component_key)
         self.children = []
         self.createChildren()
         self.initLayout()
@@ -55,8 +56,8 @@ class CompoundWidget (QGroupBox):
         self.children.append(widget)
 
     def createChildren(self):
-        for name, _, __ in self.getModel()._COMPONENTS:
-            model = self.getModel()._components[name]
+        for name, _, __ in self.model._COMPONENTS:
+            model = self.model._components[name]
             if isinstance(model, BasicComponent):
                 self.addChild(BasicWidget(self, name, name))
             elif isinstance(model, CompoundComponent):
@@ -73,9 +74,10 @@ class CompoundWidget (QGroupBox):
         self.setLayout(layout)
 
     def updateState(self):
+        self.model = getattr(self.parent().getModel(), self.componentKey)
         for c in self.children:
             c.updateState()
 
     def getModel(self):
-        return getattr(self.parent().getModel(), self.componentKey)
+        return self.model
 
