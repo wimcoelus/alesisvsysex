@@ -7,11 +7,6 @@ from alesisvsysex.ui.filedialog import *
 
 __all__ = ['AlesisVSysexApplication']
 
-class ContainerWidget (QWidget):
-
-    def __init__(self):
-        super().__init__()
-
 class EditorWidget (QTabWidget):
 
     def __init__(self, parent, model):
@@ -32,20 +27,20 @@ class EditorWidget (QTabWidget):
         self.addChild(pane1l, BasicWidget(self, self.model, "Mod Wheel", 'mwheel'))
         self.addChild(pane1l, BasicWidget(self, self.model, "Sustain", 'sustain'))
         
-        pane1 = ContainerWidget()
+        pane1 = QWidget()
         pane1.setLayout(pane1l)
         
         pane2l = QVBoxLayout()
         self.addChild(pane2l, CompoundWidget(self, self.model, "Knobs", 'knobs'))
     #    self.addChild(pane2l, CompoundWidget(self, self.model, "Buttons", 'buttons'))
         
-        pane2 = ContainerWidget()
+        pane2 = QWidget()
         pane2.setLayout(pane2l)
         
         pane3l = QVBoxLayout()
         self.addChild(pane3l,CompoundWidget(self, self.model, "Pads", 'pads'))
         
-        pane3 = ContainerWidget()
+        pane3 = QWidget()
         pane3.setLayout(pane3l)
         
         self.addTab(pane1, "Keys / Wheels / Sustain")
