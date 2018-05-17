@@ -11,12 +11,6 @@ class ContainerWidget (QWidget):
 
     def __init__(self):
         super().__init__()
-        
-    def getModel(self):
-        p = self.parent()
-        while not isinstance(p, EditorWidget):
-            p = p.parent()
-        return p.getModel()
 
 class EditorWidget (QTabWidget):
 
@@ -58,14 +52,8 @@ class EditorWidget (QTabWidget):
         self.addTab(pane2, "Knobs")
         self.addTab(pane3, "Pads")
 
-    def getModel(self):
-        return self.model
-
     def setModel(self, model):
         self.model = model
-        self.updateState()
-        
-    def updateState(self):
         for c in self.children:
             c.setModel(self.model)
 
