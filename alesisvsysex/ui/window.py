@@ -42,14 +42,14 @@ class EditorWidget (QTabWidget):
         pane1.setLayout(pane1l)
         
         pane2l = QVBoxLayout()
-        self.addChild(pane2l, CompoundWidget(self, "Knobs", 'knobs'))
-    #    self.addChild(pane2l, CompoundWidget(self, "Buttons", 'buttons'))
+        self.addChild(pane2l, CompoundWidget(self, self.model, "Knobs", 'knobs'))
+    #    self.addChild(pane2l, CompoundWidget(self, self.model, "Buttons", 'buttons'))
         
         pane2 = ContainerWidget()
         pane2.setLayout(pane2l)
         
         pane3l = QVBoxLayout()
-        self.addChild(pane3l,CompoundWidget(self, "Pads", 'pads'))
+        self.addChild(pane3l,CompoundWidget(self, self.model, "Pads", 'pads'))
         
         pane3 = ContainerWidget()
         pane3.setLayout(pane3l)

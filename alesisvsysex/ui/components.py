@@ -40,14 +40,14 @@ class BasicWidget (QGroupBox):
 
 class CompoundWidget (QGroupBox):
     
-    def __init__(self, parent, name, component_key):
+    def __init__(self, parent, model, name, component_key):
         if name is not None:
             super().__init__(name, parent)
         else:
             super().__init__(parent)
         self.componentName = name
         self.componentKey = component_key
-        self.model = getattr(parent.getModel(), component_key)
+        self.model = getattr(model, component_key)
         self.children = []
         self.createChildren()
         self.initLayout()
@@ -61,7 +61,7 @@ class CompoundWidget (QGroupBox):
             if isinstance(model, BasicComponent):
                 self.addChild(BasicWidget(self, name, name))
             elif isinstance(model, CompoundComponent):
-                self.addChild(CompoundWidget(self, name, name))
+                self.addChild(CompoundWidget(self, self.model, name, name))
 
     def initLayout(self):
         layout = QGridLayout()
