@@ -5,11 +5,11 @@ from alesisvsysex.ui.values import *
 
 class BasicWidget (QGroupBox):
     
-    def __init__(self, parent, name, component_key):
+    def __init__(self, parent, model, name, component_key):
         super().__init__(name, parent)
         self.componentName = name
         self.componentKey = component_key
-        self.model = getattr(parent.getModel(), component_key)
+        self.model = getattr(model, component_key)
         self.children = []
         self.childNames = []
         self.createChildren()
@@ -59,7 +59,7 @@ class CompoundWidget (QGroupBox):
         for name, _, __ in self.model._COMPONENTS:
             model = self.model._components[name]
             if isinstance(model, BasicComponent):
-                self.addChild(BasicWidget(self, name, name))
+                self.addChild(BasicWidget(self, self.model, name, name))
             elif isinstance(model, CompoundComponent):
                 self.addChild(CompoundWidget(self, self.model, name, name))
 
@@ -77,7 +77,3 @@ class CompoundWidget (QGroupBox):
         self.model = getattr(model, self.componentKey)
         for c in self.children:
             c.setModel(self.model)
-
-    def getModel(self):
-        return self.model
-
