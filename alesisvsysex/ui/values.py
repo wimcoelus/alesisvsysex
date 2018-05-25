@@ -12,6 +12,9 @@ class IntegerSelector (QSpinBox):
         self.updateState()
         self.valueChanged.connect(self.updateModel)
         
+    def widget(self):
+        return self
+
     def updateState(self):
         self.setValue(getattr(self.model, self.fieldName).as_int())
     
@@ -35,6 +38,9 @@ class EnumSelector (QComboBox):
         self.updateState()
         self.currentIndexChanged.connect(self.updateModel)
         
+    def widget(self):
+        return self
+
     def updateState(self):
         for i, (k, v) in enumerate(self.enumValues):
             if getattr(self.model, self.fieldName).as_int() == v:

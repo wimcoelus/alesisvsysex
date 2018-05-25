@@ -30,7 +30,7 @@ class BasicWidget (QGroupBox):
     def initLayout(self):
         layout = QFormLayout()
         for fieldName, fieldValue in zip(self.childNames, self.children):
-            layout.addRow(fieldName, fieldValue)
+            layout.addRow(fieldName, fieldValue.widget())
         self.setLayout(layout)
         
     def setModel(self, model):
