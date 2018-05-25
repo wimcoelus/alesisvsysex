@@ -25,7 +25,7 @@ class BasicWidget (QGroupBox):
             if issubclass(cls, IntValue):
                 self.addChild(fieldName, IntegerSelector(self, self.model, field))
             elif issubclass(cls, AbstractEnumValue):
-                self.addChild(fieldName, EnumSelector(self, self.model, field))
+                self.addChild(fieldName, EnumSelector(self.model, field))
 
     def initLayout(self):
         layout = QFormLayout()

@@ -31,10 +31,9 @@ class IntegerSelector (QSpinBox):
         self.model = model
         self.updateState()
 
-class EnumSelector (QComboBox):
+class EnumSelector:
 
-    def __init__(self, parent, model, field):
-        super().__init__(parent)
+    def __init__(self, model, field):
         self._widget = None
         self.fieldName = field
         self.model = model
@@ -42,11 +41,12 @@ class EnumSelector (QComboBox):
         self.enumValues = list(sorted(self.enumClass._VALUES.items(), key=lambda x: x[1]))
 
     def initializeWidget(self):
-        self._widget = self
+        widget = QComboBox()
+        self._widget = widget
         for k, v in self.enumValues:
-            self.addItem(k, v)
+            widget.addItem(k, v)
         self.updateState()
-        self.currentIndexChanged.connect(self.updateModel)
+        widget.currentIndexChanged.connect(self.updateModel)
         
     def widget(self):
         if self._widget is None:
@@ -56,15 +56,16 @@ class EnumSelector (QComboBox):
     def updateState(self):
         for i, (k, v) in enumerate(self.enumValues):
             if getattr(self.model, self.fieldName).as_int() == v:
-                self.setCurrentIndex(i)
+                self._widget.setCurrentIndex(i)
                 break
         else:
             raise RuntimeError("Invalid state for component '%s' field '%s'"
                                % (self.model.__class__.__name__, self.fieldName))
                                
     def updateModel(self):
-        setattr(self.model, self.fieldName, self.enumClass(self.enumValues[self.currentIndex()][1]))
+        setattr(self.model, self.fieldName, self.enumClass(self.enumValues[self._widget.currentIndex()][1]))
 
     def setModel(self, model):
         self.model = model
-        self.updateState()
+        if self._widget is not None:
+            self.updateState()
