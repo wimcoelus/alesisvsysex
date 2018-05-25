@@ -5,15 +5,21 @@ class IntegerSelector (QSpinBox):
 
     def __init__(self, parent, model, field):
         super().__init__(parent)
+        self._widget = None
         self.fieldName = field
         self.model = model
+
+    def initializeWidget(self):
+        self._widget = self
         self.setRange(0x00, 0x7f)
         self.setSingleStep(1)
         self.updateState()
         self.valueChanged.connect(self.updateModel)
         
     def widget(self):
-        return self
+        if self._widget is None:
+            self.initializeWidget()
+        return self._widget
 
     def updateState(self):
         self.setValue(getattr(self.model, self.fieldName).as_int())
@@ -29,17 +35,23 @@ class EnumSelector (QComboBox):
 
     def __init__(self, parent, model, field):
         super().__init__(parent)
+        self._widget = None
         self.fieldName = field
         self.model = model
         self.enumClass = model._params[field].__class__
         self.enumValues = list(sorted(self.enumClass._VALUES.items(), key=lambda x: x[1]))
+
+    def initializeWidget(self):
+        self._widget = self
         for k, v in self.enumValues:
             self.addItem(k, v)
         self.updateState()
         self.currentIndexChanged.connect(self.updateModel)
         
     def widget(self):
-        return self
+        if self._widget is None:
+            self.initializeWidget()
+        return self._widget
 
     def updateState(self):
         for i, (k, v) in enumerate(self.enumValues):
