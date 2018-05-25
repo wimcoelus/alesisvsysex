@@ -1,20 +1,20 @@
 from PyQt5.QtWidgets import *
 from alesisvsysex.protocol.types import *
 
-class IntegerSelector (QSpinBox):
+class IntegerSelector:
 
-    def __init__(self, parent, model, field):
-        super().__init__(parent)
+    def __init__(self, model, field):
         self._widget = None
         self.fieldName = field
         self.model = model
 
     def initializeWidget(self):
-        self._widget = self
-        self.setRange(0x00, 0x7f)
-        self.setSingleStep(1)
+        widget = QSpinBox()
+        self._widget = widget
+        widget.setRange(0x00, 0x7f)
+        widget.setSingleStep(1)
         self.updateState()
-        self.valueChanged.connect(self.updateModel)
+        widget.valueChanged.connect(self.updateModel)
         
     def widget(self):
         if self._widget is None:
@@ -22,14 +22,15 @@ class IntegerSelector (QSpinBox):
         return self._widget
 
     def updateState(self):
-        self.setValue(getattr(self.model, self.fieldName).as_int())
+        self._widget.setValue(getattr(self.model, self.fieldName).as_int())
     
     def updateModel(self):
-        setattr(self.model, self.fieldName, IntValue(self.value()))
+        setattr(self.model, self.fieldName, IntValue(self._widget.value()))
     
     def setModel(self, model):
         self.model = model
-        self.updateState()
+        if self._widget is not None:
+            self.updateState()
 
 class EnumSelector:
 

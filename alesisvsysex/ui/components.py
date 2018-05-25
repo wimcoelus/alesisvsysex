@@ -23,7 +23,7 @@ class BasicWidget (QGroupBox):
         for field, cls, _ in self.model._PARAMS:
             fieldName = QLabel(field)
             if issubclass(cls, IntValue):
-                self.addChild(fieldName, IntegerSelector(self, self.model, field))
+                self.addChild(fieldName, IntegerSelector(self.model, field))
             elif issubclass(cls, AbstractEnumValue):
                 self.addChild(fieldName, EnumSelector(self.model, field))
 
