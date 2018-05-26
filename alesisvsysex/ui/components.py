@@ -32,7 +32,10 @@ class BasicWidget (QGroupBox):
         for fieldName, fieldValue in zip(self.childNames, self.children):
             layout.addRow(fieldName, fieldValue.widget())
         self.setLayout(layout)
-        
+
+    def widget(self):
+        return self
+
     def setModel(self, model):
         self.model = getattr(model, self.componentKey)
         for c in self.children:
@@ -52,8 +55,8 @@ class CompoundWidget (QGroupBox):
         self.createChildren()
         self.initLayout()
 
-    def addChild(self, widget):
-        self.children.append(widget)
+    def addChild(self, child):
+        self.children.append(child)
 
     def createChildren(self):
         for name, _, __ in self.model._COMPONENTS:
@@ -69,9 +72,12 @@ class CompoundWidget (QGroupBox):
         layout.setColumnStretch(1, 1)
         layout.setColumnStretch(2, 1)
         layout.setColumnStretch(3, 1)
-        for widget in self.children:
-            layout.addWidget(widget)
+        for child in self.children:
+            layout.addWidget(child.widget())
         self.setLayout(layout)
+
+    def widget(self):
+        return self
 
     def setModel(self, model):
         self.model = getattr(model, self.componentKey)

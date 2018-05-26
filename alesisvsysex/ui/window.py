@@ -15,9 +15,9 @@ class EditorWidget (QTabWidget):
         self.model = model
         self.initLayout()
         
-    def addChild(self, parent, widget):
-        parent.addWidget(widget)
-        self.children.append(widget)
+    def addChild(self, parent, child):
+        parent.addWidget(child.widget())
+        self.children.append(child)
         
     def initLayout(self):
     
