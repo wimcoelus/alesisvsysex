@@ -55,16 +55,16 @@ class EnumSelector:
         return self._widget
 
     def updateState(self):
-        for i, (k, v) in enumerate(self.enumValues):
-            if getattr(self.model, self.fieldName).as_int() == v:
-                self._widget.setCurrentIndex(i)
-                break
+        datum = getattr(self.model, self.fieldName).as_int()
+        index = self._widget.findData(datum)
+        if index != -1:
+            self._widget.setCurrentIndex(index)
         else:
             raise RuntimeError("Invalid state for component '%s' field '%s'"
                                % (self.model.__class__.__name__, self.fieldName))
-                               
+
     def updateModel(self):
-        setattr(self.model, self.fieldName, self.enumClass(self.enumValues[self._widget.currentIndex()][1]))
+        setattr(self.model, self.fieldName, self.enumClass(self._widget.currentData()))
 
     def setModel(self, model):
         self.model = model
