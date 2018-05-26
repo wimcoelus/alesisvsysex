@@ -22,10 +22,10 @@ class EditorWidget (QTabWidget):
     def initLayout(self):
     
         pane1l = QHBoxLayout()
-        self.addChild(pane1l, BasicWidget(self, self.model, "Keys", 'keys'))
-        self.addChild(pane1l, BasicWidget(self, self.model, "Pitch Wheel", 'pwheel'))
-        self.addChild(pane1l, BasicWidget(self, self.model, "Mod Wheel", 'mwheel'))
-        self.addChild(pane1l, BasicWidget(self, self.model, "Sustain", 'sustain'))
+        self.addChild(pane1l, BasicWidget(self.model, "Keys", 'keys'))
+        self.addChild(pane1l, BasicWidget(self.model, "Pitch Wheel", 'pwheel'))
+        self.addChild(pane1l, BasicWidget(self.model, "Mod Wheel", 'mwheel'))
+        self.addChild(pane1l, BasicWidget(self.model, "Sustain", 'sustain'))
         
         pane1 = QWidget()
         pane1.setLayout(pane1l)

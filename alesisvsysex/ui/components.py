@@ -3,10 +3,10 @@ from alesisvsysex.protocol.types import AbstractEnumValue, IntValue
 from alesisvsysex.protocol.model import AlesisV, CompoundComponent, BasicComponent
 from alesisvsysex.ui.values import *
 
-class BasicWidget (QGroupBox):
-    
-    def __init__(self, parent, model, name, component_key):
-        super().__init__(name, parent)
+class BasicWidget:
+
+    def __init__(self, model, name, component_key):
+        self.name = name
         self._widget = None
         self.componentName = name
         self.componentKey = component_key
@@ -27,11 +27,11 @@ class BasicWidget (QGroupBox):
                 self.addChild(field, EnumSelector(self.model, field))
 
     def initializeWidget(self):
-        self._widget = self
+        self._widget = QGroupBox(self.name)
         layout = QFormLayout()
         for fieldName, fieldValue in zip(self.childNames, self.children):
             layout.addRow(QLabel(fieldName), fieldValue.widget())
-        self.setLayout(layout)
+        self._widget.setLayout(layout)
 
     def widget(self):
         if self._widget is None:
@@ -64,7 +64,7 @@ class CompoundWidget (QGroupBox):
         for name, _, __ in self.model._COMPONENTS:
             model = self.model._components[name]
             if isinstance(model, BasicComponent):
-                self.addChild(BasicWidget(self, self.model, name, name))
+                self.addChild(BasicWidget(self.model, name, name))
             elif isinstance(model, CompoundComponent):
                 self.addChild(CompoundWidget(self, self.model, name, name))
 
