@@ -43,13 +43,10 @@ class BasicWidget:
         for c in self.children:
             c.setModel(self.model)
 
-class CompoundWidget (QGroupBox):
-    
-    def __init__(self, parent, model, name, component_key):
-        if name is not None:
-            super().__init__(name, parent)
-        else:
-            super().__init__(parent)
+class CompoundWidget:
+
+    def __init__(self, model, name, component_key):
+        self.name = name
         self._widget = None
         self.componentName = name
         self.componentKey = component_key
@@ -66,10 +63,13 @@ class CompoundWidget (QGroupBox):
             if isinstance(model, BasicComponent):
                 self.addChild(BasicWidget(self.model, name, name))
             elif isinstance(model, CompoundComponent):
-                self.addChild(CompoundWidget(self, self.model, name, name))
+                self.addChild(CompoundWidget(self.model, name, name))
 
     def initializeWidget(self):
-        self._widget = self
+        if self.name is not None:
+            self._widget = QGroupBox(self.name)
+        else:
+            self._widget = QGroupBox()
         layout = QGridLayout()
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
@@ -77,7 +77,7 @@ class CompoundWidget (QGroupBox):
         layout.setColumnStretch(3, 1)
         for child in self.children:
             layout.addWidget(child.widget())
-        self.setLayout(layout)
+        self._widget.setLayout(layout)
 
     def widget(self):
         if self._widget is None:
