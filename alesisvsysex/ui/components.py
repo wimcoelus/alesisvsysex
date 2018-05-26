@@ -21,16 +21,15 @@ class BasicWidget (QGroupBox):
 
     def createChildren(self):
         for field, cls, _ in self.model._PARAMS:
-            fieldName = QLabel(field)
             if issubclass(cls, IntValue):
-                self.addChild(fieldName, IntegerSelector(self.model, field))
+                self.addChild(field, IntegerSelector(self.model, field))
             elif issubclass(cls, AbstractEnumValue):
-                self.addChild(fieldName, EnumSelector(self.model, field))
+                self.addChild(field, EnumSelector(self.model, field))
 
     def initLayout(self):
         layout = QFormLayout()
         for fieldName, fieldValue in zip(self.childNames, self.children):
-            layout.addRow(fieldName, fieldValue.widget())
+            layout.addRow(QLabel(fieldName), fieldValue.widget())
         self.setLayout(layout)
 
     def widget(self):
