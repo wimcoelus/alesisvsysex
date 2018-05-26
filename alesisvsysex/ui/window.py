@@ -9,8 +9,8 @@ __all__ = ['AlesisVSysexApplication']
 
 class EditorWidget (QTabWidget):
 
-    def __init__(self, parent, model):
-        super().__init__(parent)
+    def __init__(self, model):
+        super().__init__()
         self.children = []
         self.model = model
         self.initLayout()
@@ -90,7 +90,7 @@ class AlesisVSysexApplication:
         self.mainWidget = QWidget(self.mainWindow)
         layout = QVBoxLayout()
         layout.addWidget(self.createActionMenu())
-        self.editorWidget = EditorWidget(self.mainWidget, self.model)
+        self.editorWidget = EditorWidget(self.model)
         layout.addWidget(self.editorWidget.widget())
         self.mainWidget.setLayout(layout)
 
