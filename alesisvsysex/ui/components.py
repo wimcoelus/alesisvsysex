@@ -7,13 +7,13 @@ class BasicWidget (QGroupBox):
     
     def __init__(self, parent, model, name, component_key):
         super().__init__(name, parent)
+        self._widget = None
         self.componentName = name
         self.componentKey = component_key
         self.model = getattr(model, component_key)
         self.children = []
         self.childNames = []
         self.createChildren()
-        self.initLayout()
 
     def addChild(self, fieldName, fieldValue):
         self.childNames.append(fieldName)
@@ -26,14 +26,17 @@ class BasicWidget (QGroupBox):
             elif issubclass(cls, AbstractEnumValue):
                 self.addChild(field, EnumSelector(self.model, field))
 
-    def initLayout(self):
+    def initializeWidget(self):
+        self._widget = self
         layout = QFormLayout()
         for fieldName, fieldValue in zip(self.childNames, self.children):
             layout.addRow(QLabel(fieldName), fieldValue.widget())
         self.setLayout(layout)
 
     def widget(self):
-        return self
+        if self._widget is None:
+            self.initializeWidget()
+        return self._widget
 
     def setModel(self, model):
         self.model = getattr(model, self.componentKey)
@@ -47,12 +50,12 @@ class CompoundWidget (QGroupBox):
             super().__init__(name, parent)
         else:
             super().__init__(parent)
+        self._widget = None
         self.componentName = name
         self.componentKey = component_key
         self.model = getattr(model, component_key)
         self.children = []
         self.createChildren()
-        self.initLayout()
 
     def addChild(self, child):
         self.children.append(child)
@@ -65,7 +68,8 @@ class CompoundWidget (QGroupBox):
             elif isinstance(model, CompoundComponent):
                 self.addChild(CompoundWidget(self, self.model, name, name))
 
-    def initLayout(self):
+    def initializeWidget(self):
+        self._widget = self
         layout = QGridLayout()
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(1, 1)
@@ -76,7 +80,9 @@ class CompoundWidget (QGroupBox):
         self.setLayout(layout)
 
     def widget(self):
-        return self
+        if self._widget is None:
+            self.initializeWidget()
+        return self._widget
 
     def setModel(self, model):
         self.model = getattr(model, self.componentKey)
