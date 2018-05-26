@@ -47,6 +47,9 @@ class EditorWidget (QTabWidget):
         self.addTab(pane2, "Knobs")
         self.addTab(pane3, "Pads")
 
+    def widget(self):
+        return self
+
     def setModel(self, model):
         self.model = model
         for c in self.children:
@@ -88,7 +91,7 @@ class AlesisVSysexApplication:
         layout = QVBoxLayout()
         layout.addWidget(self.createActionMenu())
         self.editorWidget = EditorWidget(self.mainWidget, self.model)
-        layout.addWidget(self.editorWidget)
+        layout.addWidget(self.editorWidget.widget())
         self.mainWidget.setLayout(layout)
 
     def initMainWindow(self):
