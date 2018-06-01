@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import *
-from alesisvsysex.protocol.model import AlesisV
 from alesisvsysex.device.alesis import AlesisV25Device
 from alesisvsysex.device.file import FileDevice
 from alesisvsysex.ui.components import *
@@ -45,8 +44,8 @@ class EditorWidget:
 
 class AlesisVSysexApplication:
 
-    def __init__(self):
-        self.model = AlesisV()
+    def __init__(self, model):
+        self.model = model
         self.initMainWindow()
 
     def createActionMenu(self):
