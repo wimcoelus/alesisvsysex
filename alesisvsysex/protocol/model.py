@@ -109,3 +109,12 @@ class AlesisV (CompoundComponent):
         ('pads',    Pads,       {})
     ]
 
+    _GROUPS = (('Keys / Wheels / Sustain', 'horizontal',
+                (('Keys', 'keys'),
+                 ('Pitch Wheel', 'pwheel'),
+                 ('Mod Wheel', 'mwheel'),
+                 ('Sustain', 'sustain'))),
+               ('Knobs', 'vertical',
+                (('Knobs', 'knobs'),)),
+               ('Pads', 'vertical',
+                (('Pads', 'pads'),)))

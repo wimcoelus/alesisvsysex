@@ -20,32 +20,20 @@ class EditorWidget:
         self.children.append(child)
         
     def initLayout(self):
-    
-        pane1l = QHBoxLayout()
-        self.addChild(pane1l, BasicWidget(self.model, "Keys", 'keys'))
-        self.addChild(pane1l, BasicWidget(self.model, "Pitch Wheel", 'pwheel'))
-        self.addChild(pane1l, BasicWidget(self.model, "Mod Wheel", 'mwheel'))
-        self.addChild(pane1l, BasicWidget(self.model, "Sustain", 'sustain'))
-        
-        pane1 = QWidget()
-        pane1.setLayout(pane1l)
-        
-        pane2l = QVBoxLayout()
-        self.addChild(pane2l, CompoundWidget(self.model, "Knobs", 'knobs'))
-    #    self.addChild(pane2l, CompoundWidget(self.model, "Buttons", 'buttons'))
-        
-        pane2 = QWidget()
-        pane2.setLayout(pane2l)
-        
-        pane3l = QVBoxLayout()
-        self.addChild(pane3l,CompoundWidget(self.model, "Pads", 'pads'))
-        
-        pane3 = QWidget()
-        pane3.setLayout(pane3l)
-        
-        self._widget.addTab(pane1, "Keys / Wheels / Sustain")
-        self._widget.addTab(pane2, "Knobs")
-        self._widget.addTab(pane3, "Pads")
+        for (group_title, style, elements) in self.model._GROUPS:
+            if style == 'horizontal':
+                uiclass = BasicWidget
+                layout = QHBoxLayout()
+            else:
+                uiclass = CompoundWidget
+                layout = QVBoxLayout()
+
+            for (name, key) in elements:
+                self.addChild(layout, uiclass(self.model, name, key))
+
+            pane = QWidget()
+            pane.setLayout(layout)
+            self._widget.addTab(pane, group_title)
 
     def widget(self):
         return self._widget
