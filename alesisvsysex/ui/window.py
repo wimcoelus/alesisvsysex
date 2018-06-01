@@ -6,6 +6,42 @@ from alesisvsysex.ui.filedialog import *
 
 __all__ = ['AlesisVSysexApplication']
 
+all_windows = set()
+
+def preserveWindow(window):
+    all_windows.add(window)
+
+def unpreserveWindow(window):
+    all_windows.remove(window)
+
+class DisappointingMainWindow (QMainWindow):
+    # In order to create a second main window object that survives
+    # long enough to interact with we have to prevent the GC from
+    # deleting it.  That's easily enough handled.  In order to prevent
+    # memory leaks we need to allow the GC to delete the window once
+    # it is closed.  There is no signal for window-close, so we must
+    # implement a closeEvent() method in order to catch the close
+    # event.  Which requires subclassing QMainWindow().  Which we
+    # wouldn't need to do, were it not for the GC being obnoxious and
+    # the lack of a suitable existing signal to connect.  I am...
+    # disappointed.
+
+    # Another angle would be to create a QObject subclass with an
+    # eventFilter() method and install it as an event filter on the
+    # main window.  This still requires subclassing a Qt class, and
+    # then doing the event-type dispatch "by hand".  Also
+    # disappointing.
+
+    def __init__(self, controller):
+        super().__init__()
+        preserveWindow(controller)
+        self._controller = controller
+
+    def closeEvent(self, event):
+        unpreserveWindow(self._controller)
+        self._controller = None
+        event.accept()
+
 class EditorWidget:
 
     def __init__(self, model):
@@ -82,7 +118,7 @@ class AlesisVSysexApplication:
         self.mainWidget.setLayout(layout)
 
     def initMainWindow(self):
-        self.mainWindow = QMainWindow()
+        self.mainWindow = DisappointingMainWindow(self)
         self.statusBar = self.mainWindow.statusBar()
         self.mainWindow.setWindowTitle('Alesis V-Series SysEx Editor')
         self.initMainWidget()
