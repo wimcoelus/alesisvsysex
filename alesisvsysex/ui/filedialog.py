@@ -16,8 +16,8 @@ def launchSaveFileDialog(parent, delegate):
     dialog.setDefaultSuffix(DEFAULT_EXT)
     dialog.setFileMode(QFileDialog.AnyFile)
     dialog.setAcceptMode(QFileDialog.AcceptSave)
-    dialog.fileSelected.connect(delegate.saveFileCallback)
-    dialog.open()
+    if dialog.exec():
+        delegate.saveFileCallback(dialog.selectedFiles()[0])
     
 def launchLoadFileDialog(parent, delegate):
 
@@ -30,6 +30,6 @@ def launchLoadFileDialog(parent, delegate):
     dialog.setDefaultSuffix(DEFAULT_EXT)
     dialog.setFileMode(QFileDialog.ExistingFile)
     dialog.setAcceptMode(QFileDialog.AcceptOpen)
-    dialog.fileSelected.connect(delegate.loadFileCallback)
-    dialog.open()
+    if dialog.exec():
+        delegate.loadFileCallback(dialog.selectedFiles()[0])
 
