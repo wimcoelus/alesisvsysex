@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QPoint
 from alesisvsysex.device.alesis import AlesisV25Device
 from alesisvsysex.device.file import FileDevice
 from alesisvsysex.ui.components import *
@@ -126,6 +127,16 @@ class AlesisVSysexApplication:
         self.showStatusMessage('Ready.')
         self.mainWindow.show()
 
+    def positionRelativeTo(self, parentWindow):
+        parentPosition = parentWindow.pos()
+        frameHeight = parentWindow.geometry().top() - parentPosition.y()
+        if frameHeight == 0:
+            frameHeight = 40
+        targetPosition = parentPosition + 2 * QPoint(frameHeight, frameHeight)
+        targetBottomRight = self.mainWindow.rect().bottomRight() + targetPosition
+        if QApplication.desktop().availableGeometry(self.mainWindow).contains(targetBottomRight):
+            self.mainWindow.move(targetPosition)
+
     def setModel(self, model):
         self.model = model
         self.editorWidget.setModel(model)
@@ -147,6 +158,7 @@ class AlesisVSysexApplication:
     def loadFileCallback(self, name):
         f = FileDevice(name)
         window = self.__class__(f.get_config())
+        window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from '%s'." % name)
     
     def saveDevice(self):
@@ -157,5 +169,6 @@ class AlesisVSysexApplication:
     def loadDevice(self):
         device = AlesisV25Device()
         window = self.__class__(device.get_config())
+        window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from MIDI device.")
 
