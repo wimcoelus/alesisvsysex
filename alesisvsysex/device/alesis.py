@@ -7,6 +7,7 @@ class AlesisMIDIDevice (object):
     
     def __init__(self, portName, modelClass):
         self._port = mido.open_ioport(portName)
+        self.modelClass = modelClass
     
     def __del__(self):
         try:
@@ -37,7 +38,7 @@ class AlesisMIDIDevice (object):
         return SysexMessage.deserialize(r.bin())
 
     def get_config(self):
-        self._send(SysexMessage('query'))
+        self._send(SysexMessage('query', self.modelClass))
         return self._recv().model
     
     def set_config(self, model):
