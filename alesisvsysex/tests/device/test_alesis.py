@@ -7,12 +7,12 @@ import unittest
 class TestDevice(unittest.TestCase):
     @unittest.skip("requires connected device")
     def test_v25_constructor(self):
-        d = AlesisV25Device()
+        d = AlesisMIDIDevice()
         assert d._port is not None
 
     @unittest.skip("requires connected device")
     def test_v25_send_recv(self):
-        d = AlesisV25Device()
+        d = AlesisMIDIDevice()
         m = SysexMessage('query')
         d._send(m)
         r = d._recv()
@@ -20,13 +20,13 @@ class TestDevice(unittest.TestCase):
 
     @unittest.skip("requires connected device")
     def test_v25_get_config(self):
-        d = AlesisV25Device()
+        d = AlesisMIDIDevice()
         r = d.get_config()
         assert isinstance(r, AlesisV)
 
     @unittest.skip("requires connected device")
     def test_v25_set_config(self):
-        d = AlesisV25Device()
+        d = AlesisMIDIDevice()
         orig = d.get_config()
     
         new = orig.copy()

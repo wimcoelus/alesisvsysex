@@ -1,9 +1,9 @@
 import mido
 from alesisvsysex.protocol.sysex import SysexMessage
 
-__all__ = ['AlesisV25Device']
+__all__ = ['AlesisMIDIDevice']
 
-class AlesisV25Device (object):
+class AlesisMIDIDevice (object):
     
     _PORT_PREFIX = "VMini:VMini MIDI 2"
     

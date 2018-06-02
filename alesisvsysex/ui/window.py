@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint
-from alesisvsysex.device.alesis import AlesisV25Device
+from alesisvsysex.device.alesis import AlesisMIDIDevice
 from alesisvsysex.device.file import FileDevice
 from alesisvsysex.ui.components import *
 from alesisvsysex.ui.filedialog import *
@@ -162,12 +162,12 @@ class AlesisVSysexApplication:
         window.showStatusMessage("Loaded configuration from '%s'." % name)
     
     def saveDevice(self):
-        device = AlesisV25Device()
+        device = AlesisMIDIDevice()
         device.set_config(self.model)
         self.showStatusMessage("Saved configuration to MIDI device.")
     
     def loadDevice(self):
-        device = AlesisV25Device()
+        device = AlesisMIDIDevice()
         window = self.__class__(device.get_config())
         window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from MIDI device.")
