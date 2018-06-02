@@ -3,7 +3,7 @@ import struct
 from alesisvsysex.protocol.types import *
 from alesisvsysex.protocol.component import *
 
-__all__ = ['AlesisV25', 'AlesisVMini', 'Keys' , 'PitchWheel', 'VMiniPitchWheel', 'ModWheel', 'VMiniModWheel', 'Sustain', 'VMiniSustain', 'Knob', 'Knobs', 'Pad', 'Pads', 'VMiniPads', 'Button', 'Buttons']
+__all__ = ['AlesisModel', 'AlesisV25', 'AlesisVMini', 'Keys' , 'PitchWheel', 'VMiniPitchWheel', 'ModWheel', 'VMiniModWheel', 'Sustain', 'VMiniSustain', 'Knob', 'Knobs', 'Pad', 'Pads', 'VMiniPads', 'Button', 'Buttons']
 
 class Keys (BasicComponent):
 
@@ -135,7 +135,15 @@ class Buttons (CompoundComponent):
         ('button4', Button, {'cc': IntValue(0x33)})
     ]
 
-class AlesisV25 (CompoundComponent):
+class AlesisModel (CompoundComponent):
+
+    @classmethod
+    def findModelByDeviceId(cls, device_id):
+        for subclass in cls.__subclasses__():
+            if subclass._DEVICE_ID == device_id:
+                return subclass
+
+class AlesisV25 (AlesisModel):
 
     _PORT_PREFIX = "V25:V25 MIDI 2"
     _DEVICE_ID   = [0x00, 0x41]
@@ -161,7 +169,7 @@ class AlesisV25 (CompoundComponent):
                ('Pads', 'vertical',
                 (('Pads', 'pads'),)))
 
-class AlesisVMini (CompoundComponent):
+class AlesisVMini (AlesisModel):
 
     _PORT_PREFIX = "VMini:VMini MIDI 2"
     _DEVICE_ID   = [0x00, 0x49]

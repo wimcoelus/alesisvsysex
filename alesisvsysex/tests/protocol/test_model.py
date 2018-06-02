@@ -170,5 +170,14 @@ class TestModel(unittest.TestCase):
         a = AlesisV25()
         assert a.buttons.button1.cc.as_int() == 0x30
 
+    def test_find_by_id_invalid(self):
+        assert AlesisModel.findModelByDeviceId([0xff, 0xff]) is None
+
+    def test_find_by_id_v25(self):
+        assert AlesisModel.findModelByDeviceId([0x00, 0x41]) == AlesisV25
+
+    def test_find_by_id_vmini(self):
+        assert AlesisModel.findModelByDeviceId([0x00, 0x49]) == AlesisVMini
+
 if __name__ == '__main__':
     unittest.main()
