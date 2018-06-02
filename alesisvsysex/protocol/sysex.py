@@ -1,4 +1,4 @@
-from .model import AlesisVMini
+from .model import AlesisModel
 
 __all__ = ['SysexMessage']
 
@@ -11,7 +11,6 @@ class SysexMessage (object):
     }
 
     _MANUFACTURER_ALESIS = [0x00, 0x00, 0x0e]
-    _MESSAGE_LENGTH      = [0x00, 0x38]
 
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
@@ -47,10 +46,11 @@ class SysexMessage (object):
             raise ValueError("Invalid manufacturer id")
         i += len(cls._MANUFACTURER_ALESIS)
 
-        device_id = b[i : i + len(AlesisVMini._DEVICE_ID)]
-        if device_id != bytes(AlesisVMini._DEVICE_ID):
+        device_id = list(b[i : i + 2])
+        model_class = AlesisModel.findModelByDeviceId(device_id)
+        if model_class is None:
             raise ValueError("Invalid device id")
-        i += len(AlesisVMini._DEVICE_ID)
+        i += len(device_id)
         
         t = b[i : i + 1]
         for k, v in cls._TYPES.items():
@@ -61,16 +61,18 @@ class SysexMessage (object):
             raise ValueError("Unknown message type '0x%02x'" % t[0])
         i += 1
         
-        message_length = b[i : i + len(cls._MESSAGE_LENGTH)]
-        if message_length != bytes(cls._MESSAGE_LENGTH):
+        message_length = b[i : i + 2]
+        raw_expected_length = model_class.num_bytes()
+        expected_length = [raw_expected_length >> 7, raw_expected_length & 0x7f]
+        if message_length != bytes(expected_length):
             raise ValueError("Invalid message length")
-        i += len(cls._MESSAGE_LENGTH)
+        i += len(message_length)
         
         if msg_type == "query":
             model = None
         else:
-            model = AlesisVMini.deserialize(b[i : i + AlesisVMini.num_bytes()])
-            i += AlesisVMini.num_bytes()
+            model = model_class.deserialize(b[i : i + model_class.num_bytes()])
+            i += model_class.num_bytes()
         
         end_byte = b[i : i+1]
         if end_byte != bytes(cls._END_BYTE):

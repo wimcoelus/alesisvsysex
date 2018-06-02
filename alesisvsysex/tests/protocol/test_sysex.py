@@ -12,7 +12,6 @@ class TestSysex(unittest.TestCase):
         q = SysexMessage('query', AlesisVMini)
         assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x49, 0x62, 0x00, 0x38, 0xf7])
 
-    @unittest.skip("uses V25 message header")
     def test_deserialize_query_v25(self):
         b = bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x41, 0x62, 0x00, 0x5d, 0xf7])
         r = SysexMessage.deserialize(b)
@@ -37,9 +36,8 @@ class TestSysex(unittest.TestCase):
         res = q.serialize()
         assert res[0:len(begin)] == begin and res[-len(end):] == end
 
-    @unittest.skip("relies on V25 model")
     def test_sysex_deserialize_reply(self):
-        m = AlesisVMini()
+        m = AlesisV25()
         m.buttons.button1.cc = IntValue(0x55)
     
         q = SysexMessage('reply', m)
