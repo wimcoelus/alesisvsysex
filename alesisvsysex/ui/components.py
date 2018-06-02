@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import *
 from alesisvsysex.protocol.types import AbstractEnumValue, IntValue
-from alesisvsysex.protocol.model import AlesisV, CompoundComponent, BasicComponent
+from alesisvsysex.protocol.model import CompoundComponent, BasicComponent
 from alesisvsysex.ui.values import *
 
 class BasicWidget:
