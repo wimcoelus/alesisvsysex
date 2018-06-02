@@ -146,8 +146,8 @@ class AlesisVSysexApplication:
         
     def loadFileCallback(self, name):
         f = FileDevice(name)
-        self.setModel(f.get_config())
-        self.showStatusMessage("Loaded configuration from '%s'." % name)
+        window = self.__class__(f.get_config())
+        window.showStatusMessage("Loaded configuration from '%s'." % name)
     
     def saveDevice(self):
         device = AlesisV25Device()
@@ -156,6 +156,6 @@ class AlesisVSysexApplication:
     
     def loadDevice(self):
         device = AlesisV25Device()
-        self.setModel(device.get_config())
-        self.showStatusMessage("Loaded configuration from MIDI device.")
+        window = self.__class__(device.get_config())
+        window.showStatusMessage("Loaded configuration from MIDI device.")
 
