@@ -69,14 +69,3 @@ class SysexMessage (object):
         i += 1
         
         return SysexMessage(msg_type, model)
-    
-    @classmethod
-    def num_bytes(cls, msg_type):
-        if msg_type == 'query':
-            return (len(cls._START_BYTE) + len(cls._HEADER_START) + 1
-                    + len(cls._HEADER_END) + len(cls._END_BYTE))
-        else:
-            return (len(cls._START_BYTE) + len(cls._HEADER_START) + 1
-                    + len(cls._HEADER_END) + AlesisVMini.num_bytes()
-                    + len(cls._END_BYTE))
-        
