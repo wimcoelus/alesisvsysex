@@ -1,4 +1,4 @@
-from alesisvsysex.protocol.model import AlesisV
+from alesisvsysex.protocol.model import AlesisVMini
 
 __all__ = ['FileDevice']
 
@@ -9,7 +9,7 @@ class FileDevice (object):
 
     def get_config(self):
         with open(self.filename, 'rb') as f:
-            return AlesisV.deserialize(f.read())
+            return AlesisVMini.deserialize(f.read())
     
     def set_config(self, model):
         with open(self.filename, 'wb') as f:

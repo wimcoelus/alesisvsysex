@@ -3,7 +3,7 @@ import struct
 from alesisvsysex.protocol.types import *
 from alesisvsysex.protocol.component import *
 
-__all__ = ['AlesisV', 'Keys' , 'PitchWheel', 'ModWheel', 'Sustain', 'Knob', 'Knobs', 'Pad', 'Pads' ]
+__all__ = ['AlesisVMini', 'Keys' , 'PitchWheel', 'ModWheel', 'Sustain', 'Knob', 'Knobs', 'Pad', 'Pads' ]
     
 class Keys (BasicComponent):
 
@@ -98,7 +98,7 @@ class Pads (CompoundComponent):
 #        ('button4', Button, {'cc': IntValue(0x33)})
 #    ]
 
-class AlesisV (CompoundComponent):
+class AlesisVMini (CompoundComponent):
 
     _PORT_PREFIX = "VMini:VMini MIDI 2"
 

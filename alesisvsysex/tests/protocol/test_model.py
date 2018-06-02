@@ -173,7 +173,7 @@ class TestModel(unittest.TestCase):
 
     @unittest.skip("based on V25")
     def test_alesisv_default_const(self):
-        a = AlesisV()
+        a = AlesisVMini()
         assert a.buttons.button1.cc.as_int() == 0x30
 
 if __name__ == '__main__':

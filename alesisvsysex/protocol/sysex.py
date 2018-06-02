@@ -1,4 +1,4 @@
-from .model import AlesisV
+from .model import AlesisVMini
 
 __all__ = ['SysexMessage']
 
@@ -60,8 +60,8 @@ class SysexMessage (object):
         if msg_type == "query":
             model = None
         else:
-            model = AlesisV.deserialize(b[i : i + AlesisV.num_bytes()])
-            i += AlesisV.num_bytes()
+            model = AlesisVMini.deserialize(b[i : i + AlesisVMini.num_bytes()])
+            i += AlesisVMini.num_bytes()
         
         end_byte = b[i : i+1]
         if end_byte != bytes(cls._END_BYTE):
@@ -77,6 +77,6 @@ class SysexMessage (object):
                     + len(cls._HEADER_END) + len(cls._END_BYTE))
         else:
             return (len(cls._START_BYTE) + len(cls._HEADER_START) + 1
-                    + len(cls._HEADER_END) + AlesisV.num_bytes()
+                    + len(cls._HEADER_END) + AlesisVMini.num_bytes()
                     + len(cls._END_BYTE))
         

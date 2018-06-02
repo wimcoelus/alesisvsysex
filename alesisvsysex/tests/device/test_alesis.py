@@ -16,13 +16,13 @@ class TestDevice(unittest.TestCase):
         m = SysexMessage('query')
         d._send(m)
         r = d._recv()
-        assert isinstance(r.model, AlesisV)
+        assert isinstance(r.model, AlesisVMini)
 
     @unittest.skip("requires connected device")
     def test_v25_get_config(self):
         d = AlesisMIDIDevice()
         r = d.get_config()
-        assert isinstance(r, AlesisV)
+        assert isinstance(r, AlesisVMini)
 
     @unittest.skip("requires connected device")
     def test_v25_set_config(self):
