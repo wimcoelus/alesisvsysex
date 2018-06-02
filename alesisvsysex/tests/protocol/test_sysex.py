@@ -4,7 +4,6 @@ from alesisvsysex.protocol.sysex import SysexMessage
 import unittest
 
 class TestSysex(unittest.TestCase):
-    @unittest.skip("expects V25 message header")
     def test_sysex_serialize_query_v25(self):
         q = SysexMessage('query', AlesisV25)
         assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x41, 0x62, 0x00, 0x5d, 0xf7])
@@ -24,9 +23,8 @@ class TestSysex(unittest.TestCase):
         r = SysexMessage.deserialize(b)
         assert r.type == 'query'
 
-    @unittest.skip("expects V25 message header")
     def test_sysex_serialize_update_v25(self):
-        q = SysexMessage('update', AlesisVMini())
+        q = SysexMessage('update', AlesisV25())
         begin = bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x41, 0x61, 0x00, 0x5d])
         end = bytes([0xf7])
         res = q.serialize()

@@ -21,14 +21,16 @@ class SysexMessage (object):
         self.model = model
     
     def serialize(self):
+        raw_message_length = self.model.num_bytes()
+        message_length = [raw_message_length >> 7, raw_message_length & 0x7f]
         if self.type == 'query':
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
-                         + self._MESSAGE_LENGTH + self._END_BYTE)
+                         + message_length + self._END_BYTE)
         else:
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
-                         + self._MESSAGE_LENGTH) + self.model.serialize() + bytes(self._END_BYTE)
+                         + message_length) + self.model.serialize() + bytes(self._END_BYTE)
                      
         
     @classmethod
