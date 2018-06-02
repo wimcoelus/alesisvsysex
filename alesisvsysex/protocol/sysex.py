@@ -9,10 +9,11 @@ class SysexMessage (object):
         'query':  [0x62],
         'reply':  [0x63]
     }
-    
-    _HEADER_START = [0x00, 0x00, 0x0e, 0x00, 0x49]
-    _HEADER_END   = [0x00, 0x38]
-    
+
+    _MANUFACTURER_ALESIS = [0x00, 0x00, 0x0e]
+    _DEVICE_ID           = [0x00, 0x49]
+    _MESSAGE_LENGTH      = [0x00, 0x38]
+
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
     
@@ -22,11 +23,13 @@ class SysexMessage (object):
     
     def serialize(self):
         if self.type == 'query':
-            return bytes(self._START_BYTE + self._HEADER_START + self._TYPES[self.type]
-                         + self._HEADER_END + self._END_BYTE)
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self._DEVICE_ID
+                         + self._TYPES[self.type]
+                         + self._MESSAGE_LENGTH + self._END_BYTE)
         else:
-            return bytes(self._START_BYTE + self._HEADER_START + self._TYPES[self.type]
-                         + self._HEADER_END) + self.model.serialize() + bytes(self._END_BYTE)
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self._DEVICE_ID
+                         + self._TYPES[self.type]
+                         + self._MESSAGE_LENGTH) + self.model.serialize() + bytes(self._END_BYTE)
                      
         
     @classmethod
@@ -38,10 +41,15 @@ class SysexMessage (object):
             raise ValueError("Invalid start byte '0x%02x'" % start_byte[0])
         i += 1
         
-        header_start = b[i : i + len(cls._HEADER_START)]
-        if header_start != bytes(cls._HEADER_START):
-            raise ValueError("Invalid message header")
-        i += len(cls._HEADER_START)
+        manufacturer = b[i : i + len(cls._MANUFACTURER_ALESIS)]
+        if manufacturer != bytes(cls._MANUFACTURER_ALESIS):
+            raise ValueError("Invalid manufacturer id")
+        i += len(cls._MANUFACTURER_ALESIS)
+
+        device_id = b[i : i + len(cls._DEVICE_ID)]
+        if device_id != bytes(cls._DEVICE_ID):
+            raise ValueError("Invalid device id")
+        i += len(cls._DEVICE_ID)
         
         t = b[i : i + 1]
         for k, v in cls._TYPES.items():
@@ -52,10 +60,10 @@ class SysexMessage (object):
             raise ValueError("Unknown message type '0x%02x'" % t[0])
         i += 1
         
-        header_end = b[i : i + len(cls._HEADER_END)]
-        if header_end != bytes(cls._HEADER_END):
-            raise ValueError("Invalid message header")
-        i += len(cls._HEADER_END)
+        message_length = b[i : i + len(cls._MESSAGE_LENGTH)]
+        if message_length != bytes(cls._MESSAGE_LENGTH):
+            raise ValueError("Invalid message length")
+        i += len(cls._MESSAGE_LENGTH)
         
         if msg_type == "query":
             model = None
