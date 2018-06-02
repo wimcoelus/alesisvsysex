@@ -5,8 +5,6 @@ __all__ = ['AlesisMIDIDevice']
 
 class AlesisMIDIDevice (object):
     
-    _PORT_PREFIX = "VMini:VMini MIDI 2"
-    
     def __init__(self, portName, modelClass):
         self._port = mido.open_ioport(portName)
     
@@ -20,7 +18,7 @@ class AlesisMIDIDevice (object):
     def findPortsForModel(cls, model):
         ports = list()
         for port in mido.get_ioport_names():
-            if port.startswith(cls._PORT_PREFIX):
+            if port.startswith(model._PORT_PREFIX):
                 ports = ports + [(port, model)]
         return ports
 

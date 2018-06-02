@@ -100,6 +100,8 @@ class Pads (CompoundComponent):
 
 class AlesisV (CompoundComponent):
 
+    _PORT_PREFIX = "VMini:VMini MIDI 2"
+
     _COMPONENTS = [
         ('keys',    Keys,       {}),
         ('pwheel',  PitchWheel, {}),
