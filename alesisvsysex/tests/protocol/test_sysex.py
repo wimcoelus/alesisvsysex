@@ -1,16 +1,16 @@
 from alesisvsysex.protocol.types import *
-from alesisvsysex.protocol.model import AlesisVMini
+from alesisvsysex.protocol.model import AlesisVMini, AlesisV25
 from alesisvsysex.protocol.sysex import SysexMessage
 import unittest
 
 class TestSysex(unittest.TestCase):
     @unittest.skip("expects V25 message header")
     def test_sysex_serialize_query_v25(self):
-        q = SysexMessage('query')
+        q = SysexMessage('query', AlesisV25)
         assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x41, 0x62, 0x00, 0x5d, 0xf7])
 
     def test_sysex_serialize_query_vmini(self):
-        q = SysexMessage('query')
+        q = SysexMessage('query', AlesisVMini)
         assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x49, 0x62, 0x00, 0x38, 0xf7])
 
     @unittest.skip("uses V25 message header")

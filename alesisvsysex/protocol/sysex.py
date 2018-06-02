@@ -11,23 +11,22 @@ class SysexMessage (object):
     }
 
     _MANUFACTURER_ALESIS = [0x00, 0x00, 0x0e]
-    _DEVICE_ID           = [0x00, 0x49]
     _MESSAGE_LENGTH      = [0x00, 0x38]
 
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
     
-    def __init__(self, msg_type, model=None):
+    def __init__(self, msg_type, model):
         self.type  = msg_type
         self.model = model
     
     def serialize(self):
         if self.type == 'query':
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self._DEVICE_ID
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
                          + self._MESSAGE_LENGTH + self._END_BYTE)
         else:
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self._DEVICE_ID
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
                          + self._MESSAGE_LENGTH) + self.model.serialize() + bytes(self._END_BYTE)
                      
@@ -46,10 +45,10 @@ class SysexMessage (object):
             raise ValueError("Invalid manufacturer id")
         i += len(cls._MANUFACTURER_ALESIS)
 
-        device_id = b[i : i + len(cls._DEVICE_ID)]
-        if device_id != bytes(cls._DEVICE_ID):
+        device_id = b[i : i + len(AlesisVMini._DEVICE_ID)]
+        if device_id != bytes(AlesisVMini._DEVICE_ID):
             raise ValueError("Invalid device id")
-        i += len(cls._DEVICE_ID)
+        i += len(AlesisVMini._DEVICE_ID)
         
         t = b[i : i + 1]
         for k, v in cls._TYPES.items():

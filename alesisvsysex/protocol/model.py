@@ -138,6 +138,7 @@ class Buttons (CompoundComponent):
 class AlesisV25 (CompoundComponent):
 
     _PORT_PREFIX = "V25:V25 MIDI 2"
+    _DEVICE_ID   = [0x00, 0x41]
 
     _COMPONENTS = [
         ('keys',    Keys,       {}),
@@ -163,6 +164,7 @@ class AlesisV25 (CompoundComponent):
 class AlesisVMini (CompoundComponent):
 
     _PORT_PREFIX = "VMini:VMini MIDI 2"
+    _DEVICE_ID   = [0x00, 0x49]
 
     _COMPONENTS = [
         ('keys',    Keys,       {}),
