@@ -1,4 +1,4 @@
-from alesisvsysex.protocol.model import AlesisVMini
+from alesisvsysex.protocol.sysex import SysexMessage
 
 __all__ = ['FileDevice']
 
@@ -9,9 +9,8 @@ class FileDevice (object):
 
     def get_config(self):
         with open(self.filename, 'rb') as f:
-            return AlesisVMini.deserialize(f.read())
-    
+            return SysexMessage.deserialize(f.read()).model
+
     def set_config(self, model):
         with open(self.filename, 'wb') as f:
-            f.write(model.serialize())
-
+            f.write(SysexMessage('update', model).serialize())
