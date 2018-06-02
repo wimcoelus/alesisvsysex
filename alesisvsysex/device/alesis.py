@@ -7,19 +7,22 @@ class AlesisMIDIDevice (object):
     
     _PORT_PREFIX = "VMini:VMini MIDI 2"
     
-    def __init__(self):
-        for port in mido.get_ioport_names():
-            if port.startswith(self._PORT_PREFIX):
-                self._port = mido.open_ioport(port)
-                break
-        else:
-            raise RuntimeError("Could not find a port named '%s'" % self._PORT_PREFIX)
+    def __init__(self, portName, modelClass):
+        self._port = mido.open_ioport(portName)
     
     def __del__(self):
         try:
             self._port.close()
         except:
             pass
+
+    @classmethod
+    def findPortsForModel(cls, model):
+        ports = list()
+        for port in mido.get_ioport_names():
+            if port.startswith(cls._PORT_PREFIX):
+                ports = ports + [(port, model)]
+        return ports
 
     def _send(self, message):
         if not isinstance(message, SysexMessage):
