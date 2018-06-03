@@ -161,8 +161,11 @@ class AlesisVSysexApplication:
         window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from '%s'." % name)
 
-    def findMIDIDevice(self):
-        ports = AlesisMIDIDevice.findPortsForModel(self.model)
+    def findMIDIDevice(self, any_model):
+        if any_model:
+            ports = AlesisMIDIDevice.findAllPorts()
+        else:
+            ports = AlesisMIDIDevice.findPortsForModel(self.model)
         if len(ports) == 0:
             raise RuntimeError("Could not find a compatible MIDI device")
         elif len(ports) > 1:
@@ -170,12 +173,12 @@ class AlesisVSysexApplication:
         return AlesisMIDIDevice(ports[0][0], ports[0][1])
 
     def saveDevice(self):
-        device = self.findMIDIDevice()
+        device = self.findMIDIDevice(False)
         device.set_config(self.model)
         self.showStatusMessage("Saved configuration to MIDI device.")
     
     def loadDevice(self):
-        device = self.findMIDIDevice()
+        device = self.findMIDIDevice(True)
         window = self.__class__(device.get_config())
         window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from MIDI device.")

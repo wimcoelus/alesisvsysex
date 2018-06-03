@@ -1,5 +1,6 @@
 import mido
 from alesisvsysex.protocol.sysex import SysexMessage
+from alesisvsysex.protocol.model import AlesisModel
 
 __all__ = ['AlesisMIDIDevice']
 
@@ -21,6 +22,13 @@ class AlesisMIDIDevice (object):
         for port in mido.get_ioport_names():
             if port.startswith(model._PORT_PREFIX):
                 ports = ports + [(port, model)]
+        return ports
+
+    @classmethod
+    def findAllPorts(cls):
+        ports = list()
+        for model_class in AlesisModel.__subclasses__():
+            ports = ports + cls.findPortsForModel(model_class)
         return ports
 
     def _send(self, message):
