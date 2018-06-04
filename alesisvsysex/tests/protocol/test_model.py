@@ -170,6 +170,9 @@ class TestModel(unittest.TestCase):
         a = AlesisV25()
         assert a.buttons.button1.cc.as_int() == 0x30
 
+    def test_vi49_length(self):
+        assert AlesisVI49.num_bytes() == 385
+
     def test_find_by_id_invalid(self):
         assert AlesisModel.findModelByDeviceId([0xff, 0xff]) is None
 
