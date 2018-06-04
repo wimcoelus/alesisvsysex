@@ -197,7 +197,11 @@ class VI49Switches (CompoundComponent):
         ('button10', Button, {'cc': IntValue(0x39)}),
         ('button11', Button, {'cc': IntValue(0x3a)}),
         ('button12', Button, {'cc': IntValue(0x3b)}),
+    ]
 
+class VI49Switches2 (CompoundComponent):
+
+    _COMPONENTS = [
         ('button13', Button, {'cc': IntValue(0x40)}),
         ('button14', Button, {'cc': IntValue(0x41)}),
         ('button15', Button, {'cc': IntValue(0x42)}),
@@ -210,7 +214,11 @@ class VI49Switches (CompoundComponent):
         ('button22', Button, {'cc': IntValue(0x49)}),
         ('button23', Button, {'cc': IntValue(0x4a)}),
         ('button24', Button, {'cc': IntValue(0x4b)}),
+    ]
 
+class VI49Switches3 (CompoundComponent):
+
+    _COMPONENTS = [
         ('button25', Button, {'cc': IntValue(0x50)}),
         ('button26', Button, {'cc': IntValue(0x51)}),
         ('button27', Button, {'cc': IntValue(0x52)}),
@@ -378,13 +386,19 @@ class AlesisVI49 (AlesisModel):
         ('knobs',     VI49Knobs,    {}),
         ('pads',      VIPads,       {}),
         ('switches',  VI49Switches, {}),
+        ('switches2',  VI49Switches2, {}),
+        ('switches3',  VI49Switches3, {}),
         ('midi2din',  VIMIDI2DIN,   {})
     ]
 
     _GROUPS = (('Knobs', 'vertical',
                 (('Knobs', 'knobs'),)),
-               ('Switches', 'vertical',
+               ('Switches 1-12', 'vertical',
                 (('Switches', 'switches'),)),
+               ('Switches 13-24', 'vertical',
+                (('Switches', 'switches2'),)),
+               ('Switches 25-36', 'vertical',
+                (('Switches', 'switches3'),)),
                ('Pads', 'vertical',
                 (('Pads', 'pads'),)),
                ('Roll', 'horizontal',
