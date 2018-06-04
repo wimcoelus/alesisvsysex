@@ -18,18 +18,20 @@ class SysexMessage (object):
     def __init__(self, msg_type, model):
         self.type  = msg_type
         self.model = model
-    
+
+    @classmethod
+    def encodeWord(cls, word):
+        return [word >> 7, word & 0x7f]
+
     def serialize(self):
-        raw_message_length = self.model.num_bytes()
-        message_length = [raw_message_length >> 7, raw_message_length & 0x7f]
         if self.type == 'query':
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
-                         + message_length + self._END_BYTE)
+                         + self.encodeWord(self.model.num_bytes()) + self._END_BYTE)
         elif (self.type == 'update') or (self.type == 'reply'):
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
-                         + message_length) + self.model.serialize() + bytes(self._END_BYTE)
+                         + self.encodeWord(self.model.num_bytes())) + self.model.serialize() + bytes(self._END_BYTE)
         else:
             raise RuntimeError('Don\'t know how to encode %s messages' % self.type)
 
@@ -63,9 +65,7 @@ class SysexMessage (object):
         i += 1
         
         message_length = b[i : i + 2]
-        raw_expected_length = model_class.num_bytes()
-        expected_length = [raw_expected_length >> 7, raw_expected_length & 0x7f]
-        if message_length != bytes(expected_length):
+        if message_length != bytes(cls.encodeWord(model_class.num_bytes())):
             raise ValueError("Invalid message length")
         i += len(message_length)
         
