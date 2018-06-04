@@ -26,12 +26,13 @@ class SysexMessage (object):
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
                          + message_length + self._END_BYTE)
-        else:
+        elif (self.type == 'update') or (self.type == 'reply'):
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
                          + message_length) + self.model.serialize() + bytes(self._END_BYTE)
-                     
-        
+        else:
+            raise RuntimeError('Don\'t know how to encode %s messages' % self.type)
+
     @classmethod
     def deserialize(cls, b):
         i = 0
