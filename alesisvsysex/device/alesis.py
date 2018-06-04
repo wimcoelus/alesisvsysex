@@ -46,10 +46,14 @@ class AlesisMIDIDevice (object):
         return SysexMessage.deserialize(r.bin())
 
     def get_config(self):
+        if self.modelClass._SLOT_CONFIG:
+            raise RuntimeError('Model class uses config slots')
         self._send(SysexMessage('query', self.modelClass))
         return self._recv().model
     
     def set_config(self, model):
+        if self.modelClass._SLOT_CONFIG:
+            raise RuntimeError('Model class uses config slots')
         model_bin = model.serialize()
         self._send(SysexMessage('update', model))
         if self.get_config().serialize() != model_bin:
