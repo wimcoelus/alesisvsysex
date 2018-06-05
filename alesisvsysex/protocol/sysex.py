@@ -5,19 +5,27 @@ __all__ = ['SysexMessage']
 class SysexMessage (object):
     
     _TYPES = {
-        'update': [0x61],
-        'query':  [0x62],
-        'reply':  [0x63]
+        'update':      [0x61],
+        'query':       [0x62],
+        'reply':       [0x63],
+        'slot_update': [0x64],
+        'slot_query':  [0x65],
     }
 
     _MANUFACTURER_ALESIS = [0x00, 0x00, 0x0e]
 
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
-    
-    def __init__(self, msg_type, model):
+
+    _SLOT_QUERY_MESSAGE_LENGTH  = [0x00, 0x03]
+    _SLOT_UPDATE_MESSAGE_LENGTH = [0x00, 0x04]
+
+    def __init__(self, msg_type, model, slot=None, offset=None, datum=None):
         self.type  = msg_type
         self.model = model
+        self.slot = slot
+        self.offset = offset
+        self.datum = datum
 
     @classmethod
     def encodeWord(cls, word):
@@ -32,6 +40,15 @@ class SysexMessage (object):
             return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
                          + self._TYPES[self.type]
                          + self.encodeWord(self.model.num_bytes())) + self.model.serialize() + bytes(self._END_BYTE)
+        elif self.type == 'slot_query':
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
+                         + self._TYPES[self.type] + self._SLOT_QUERY_MESSAGE_LENGTH
+                         + [self.slot] + self.encodeWord(self.offset) + self._END_BYTE)
+        elif self.type == 'slot_update':
+            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
+                         + self._TYPES[self.type] + self._SLOT_UPDATE_MESSAGE_LENGTH
+                         + [self.slot] + self.encodeWord(self.offset)
+                         + [self.datum] + self._END_BYTE)
         else:
             raise RuntimeError('Don\'t know how to encode %s messages' % self.type)
 

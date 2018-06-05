@@ -1,5 +1,5 @@
 from alesisvsysex.protocol.types import *
-from alesisvsysex.protocol.model import AlesisVMini, AlesisV25
+from alesisvsysex.protocol.model import AlesisVMini, AlesisV25, AlesisVI49
 from alesisvsysex.protocol.sysex import SysexMessage
 import unittest
 
@@ -46,6 +46,18 @@ class TestSysex(unittest.TestCase):
         r = SysexMessage.deserialize(b)
         assert r.type == 'reply'
         assert r.model.buttons.button1.cc.as_int() == 0x55
+
+    def test_sysex_serialize_slot_query_vi49_slot1_offset0(self):
+        q = SysexMessage('slot_query', AlesisVI49, 0, 0)
+        assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x3f, 0x65, 0x00, 0x03, 0x00, 0x00, 0x00, 0xf7])
+
+    def test_sysex_serialize_slot_query_vi49_slot23_offset143(self):
+        q = SysexMessage('slot_query', AlesisVI49, 22, 143)
+        assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x3f, 0x65, 0x00, 0x03, 0x16, 0x01, 0x0f, 0xf7])
+
+    def test_sysex_serialize_slot_update_vi49(self):
+        q = SysexMessage('slot_update', AlesisVI49, 17, 262, 0x45)
+        assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x3f, 0x64, 0x00, 0x04, 0x11, 0x02, 0x06, 0x45, 0xf7])
 
 if __name__ == '__main__':
     unittest.main()
