@@ -80,9 +80,14 @@ class SysexMessage (object):
         else:
             raise ValueError("Unknown message type '0x%02x'" % t[0])
 
-        if message_length != bytes(cls.encodeWord(model_class.num_bytes())):
+        if (msg_type == "query") or (msg_type == 'update') or (msg_type == 'reply'):
+            expected_length = model_class.num_bytes()
+        else:
+            raise RuntimeError('Don\'t know expected length for %s messages' % msg_type)
+
+        if message_length != bytes(cls.encodeWord(expected_length)):
             raise ValueError("Invalid message length")
-        
+
         if msg_type == "query":
             model = None
         elif (msg_type == 'update') or (msg_type == 'reply'):
