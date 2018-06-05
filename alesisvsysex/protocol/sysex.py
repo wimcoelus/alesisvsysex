@@ -17,8 +17,8 @@ class SysexMessage (object):
     _START_BYTE = [0xf0]
     _END_BYTE   = [0xf7]
 
-    _SLOT_QUERY_MESSAGE_LENGTH  = [0x00, 0x03]
-    _SLOT_UPDATE_MESSAGE_LENGTH = [0x00, 0x04]
+    _SLOT_QUERY_MESSAGE_LENGTH  = 3
+    _SLOT_UPDATE_MESSAGE_LENGTH = 4
 
     def __init__(self, msg_type, model, slot=None, offset=None, datum=None):
         self.type  = msg_type
@@ -33,24 +33,27 @@ class SysexMessage (object):
 
     def serialize(self):
         if self.type == 'query':
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
-                         + self._TYPES[self.type]
-                         + self.encodeWord(self.model.num_bytes()) + self._END_BYTE)
+            body = b''
+            length = self.model.num_bytes()
         elif (self.type == 'update') or (self.type == 'reply'):
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
-                         + self._TYPES[self.type]
-                         + self.encodeWord(self.model.num_bytes())) + self.model.serialize() + bytes(self._END_BYTE)
+            body = self.model.serialize()
+            length = self.model.num_bytes()
         elif self.type == 'slot_query':
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
-                         + self._TYPES[self.type] + self._SLOT_QUERY_MESSAGE_LENGTH
-                         + [self.slot] + self.encodeWord(self.offset) + self._END_BYTE)
+            body = bytes([self.slot] + self.encodeWord(self.offset))
+            length = self._SLOT_QUERY_MESSAGE_LENGTH
         elif self.type == 'slot_update':
-            return bytes(self._START_BYTE + self._MANUFACTURER_ALESIS + self.model._DEVICE_ID
-                         + self._TYPES[self.type] + self._SLOT_UPDATE_MESSAGE_LENGTH
-                         + [self.slot] + self.encodeWord(self.offset)
-                         + [self.datum] + self._END_BYTE)
+            body = bytes([self.slot] + self.encodeWord(self.offset) + [self.datum])
+            length = self._SLOT_UPDATE_MESSAGE_LENGTH
         else:
             raise RuntimeError('Don\'t know how to encode %s messages' % self.type)
+
+        return (bytes(self._START_BYTE
+                      + self._MANUFACTURER_ALESIS
+                      + self.model._DEVICE_ID
+                      + self._TYPES[self.type]
+                      + self.encodeWord(length))
+                + body
+                + bytes(self._END_BYTE))
 
     @classmethod
     def deserialize(cls, b):
