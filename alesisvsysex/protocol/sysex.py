@@ -40,7 +40,11 @@ class SysexMessage (object):
             length = self.model.num_bytes()
         elif (self.type == 'update') or (self.type == 'reply'):
             body = self.model.serialize()
-            length = self.model.num_bytes()
+            length = self.model.num_bytes() + self.model._LENGTH_DELTA
+            # Add a "dummy" slot byte before the body for
+            # slot-configured devices (used for save files)
+            if self.model._SLOT_CONFIG:
+                body = b'\x00' + body
         elif self.type == 'slot_query':
             body = bytes([self.slot] + self.encodeWord(self.offset))
             length = self._SLOT_QUERY_MESSAGE_LENGTH
@@ -83,7 +87,7 @@ class SysexMessage (object):
             raise ValueError("Unknown message type '0x%02x'" % t[0])
 
         if (msg_type == "query") or (msg_type == 'update') or (msg_type == 'reply'):
-            expected_length = model_class.num_bytes()
+            expected_length = model_class.num_bytes() + model_class._LENGTH_DELTA
         elif msg_type == 'slot_reply':
             expected_length = cls._SLOT_REPLY_MESSAGE_LENGTH
         else:
@@ -91,6 +95,10 @@ class SysexMessage (object):
 
         if message_length != bytes(cls.encodeWord(expected_length)):
             raise ValueError("Invalid message length")
+
+        # Skip slot ID byte on slot-config updates (used for save files)
+        if (msg_type == 'update') and model_class._SLOT_CONFIG:
+            i += 1
 
         if msg_type == "query":
             model = None

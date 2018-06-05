@@ -314,7 +314,8 @@ class VIMIDI2DIN (BasicComponent):
 
 class AlesisModel (CompoundComponent):
 
-    _SLOT_CONFIG = False
+    _SLOT_CONFIG  = False
+    _LENGTH_DELTA = 0
 
     @classmethod
     def findModelByDeviceId(cls, device_id):
@@ -374,9 +375,10 @@ class AlesisVMini (AlesisModel):
 
 class AlesisVI49 (AlesisModel):
 
-    _PORT_PREFIX = "VI49:VI49 MIDI 2"
-    _DEVICE_ID   = [0x00, 0x3f]
-    _SLOT_CONFIG = True
+    _PORT_PREFIX  = "VI49:VI49 MIDI 2"
+    _DEVICE_ID    = [0x00, 0x3f]
+    _SLOT_CONFIG  = True
+    _LENGTH_DELTA = 0x50
 
     _COMPONENTS = [
         ('unknown',   VIUnknown,    {}),
