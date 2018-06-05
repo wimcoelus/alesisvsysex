@@ -11,6 +11,7 @@ class SysexMessage (object):
         'reply':       [0x63],
         'slot_update': [0x64],
         'slot_query':  [0x65],
+        'slot_reply':  [0x66]
     }
 
     _MANUFACTURER_ALESIS = [0x00, 0x00, 0x0e]
@@ -20,6 +21,7 @@ class SysexMessage (object):
 
     _SLOT_QUERY_MESSAGE_LENGTH  = 3
     _SLOT_UPDATE_MESSAGE_LENGTH = 4
+    _SLOT_REPLY_MESSAGE_LENGTH  = 3
 
     def __init__(self, msg_type, model, slot=None, offset=None, datum=None):
         self.type  = msg_type
@@ -82,6 +84,8 @@ class SysexMessage (object):
 
         if (msg_type == "query") or (msg_type == 'update') or (msg_type == 'reply'):
             expected_length = model_class.num_bytes()
+        elif msg_type == 'slot_reply':
+            expected_length = cls._SLOT_REPLY_MESSAGE_LENGTH
         else:
             raise RuntimeError('Don\'t know expected length for %s messages' % msg_type)
 
@@ -90,9 +94,18 @@ class SysexMessage (object):
 
         if msg_type == "query":
             model = None
+            offset = None
+            datum = None
         elif (msg_type == 'update') or (msg_type == 'reply'):
             model = model_class.deserialize(b[i : i + model_class.num_bytes()])
+            offset = None
+            datum = None
             i += model_class.num_bytes()
+        elif msg_type == 'slot_reply':
+            model = model_class
+            offset = (b[i] << 7) | b[i + 1]
+            datum = b[i + 2]
+            i += cls._SLOT_REPLY_MESSAGE_LENGTH
         else:
             raise RuntimeError('Don\'t know how to decode %s messages' % msg_type)
         
@@ -101,4 +114,4 @@ class SysexMessage (object):
             raise ValueError("Invalid end byte '0x%02x'" % end_byte[0])
         i += 1
         
-        return SysexMessage(msg_type, model)
+        return SysexMessage(msg_type, model, None, offset, datum)

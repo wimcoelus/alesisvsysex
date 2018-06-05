@@ -59,5 +59,13 @@ class TestSysex(unittest.TestCase):
         q = SysexMessage('slot_update', AlesisVI49, 17, 262, 0x45)
         assert q.serialize() == bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x3f, 0x64, 0x00, 0x04, 0x11, 0x02, 0x06, 0x45, 0xf7])
 
+    def test_sysex_deserialize_slot_reply(self):
+        message = bytes([0xf0, 0x00, 0x00, 0x0e, 0x00, 0x3f, 0x66, 0x00, 0x03, 0x02, 0x7f, 0x55, 0xf7])
+        r = SysexMessage.deserialize(message)
+        assert r.type == 'slot_reply'
+        assert r.model == AlesisVI49
+        assert r.offset == 0x17f
+        assert r.datum == 0x55
+
 if __name__ == '__main__':
     unittest.main()
