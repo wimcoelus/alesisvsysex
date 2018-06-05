@@ -174,11 +174,18 @@ class AlesisVSysexApplication:
 
     def saveDevice(self):
         device = self.findMIDIDevice(False)
-        device.set_config(self.model)
+        if self.model._SLOT_CONFIG:
+            device.set_slot_config(0, self.model)
+        else:
+            device.set_config(self.model)
         self.showStatusMessage("Saved configuration to MIDI device.")
     
     def loadDevice(self):
         device = self.findMIDIDevice(True)
-        window = self.__class__(device.get_config())
+        if device.modelClass._SLOT_CONFIG:
+            model = device.get_slot_config(0)
+        else:
+            model = device.get_config()
+        window = self.__class__(model)
         window.positionRelativeTo(self.mainWindow)
         window.showStatusMessage("Loaded configuration from MIDI device.")

@@ -59,3 +59,19 @@ class AlesisMIDIDevice (object):
         if self.get_config().serialize() != model_bin:
             raise RuntimeError('Failed to update configuration')
 
+    def get_slot_config(self, slot):
+        if not self.modelClass._SLOT_CONFIG:
+            raise RuntimeError('Model class does not use config slots')
+        config = b''
+        for offset in range(self.modelClass.num_bytes()):
+            self._send(SysexMessage('slot_query', self.modelClass, slot, offset))
+            reply = self._recv()
+            config += bytes([reply.datum])
+        return self.modelClass.deserialize(config)
+
+    def set_slot_config(self, slot, model):
+        if not self.modelClass._SLOT_CONFIG:
+            raise RuntimeError('Model class does not use config slots')
+        config = model.serialize()
+        for offset in range(model.num_bytes()):
+            self._send(SysexMessage('slot_update', model, slot, offset, config[offset]))
