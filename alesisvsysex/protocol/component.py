@@ -79,8 +79,8 @@ class BasicComponent (object):
     
     def __init__(self, *args, **kwargs):
     
-        # Initialize with default arguments
-        self._params = {k: cls(*args) for k, cls, args in self._PARAMS}
+        # Initialize with empty dictionary
+        self._params = {}
         
         # Try to initialize from positional arguments, if any
         if len(args):
@@ -104,6 +104,11 @@ class BasicComponent (object):
             except StopIteration:
                 raise ValueError("Invalid argument '%s' for component '%s'."
                                  % (k, self.__class__.__name__))
+
+        # Initialize remaining parameter from defaults
+        for k, cls, args in self._PARAMS:
+            if not k in self._params:
+                self._params[k] = cls(*args)
     
     def copy(self):
         return self.__class__(**{k: v for k, v in self._params.items()})
