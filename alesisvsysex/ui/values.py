@@ -7,11 +7,12 @@ class IntegerSelector:
         self._widget = None
         self.fieldName = field
         self.model = model
+        self.modelClass = getattr(model, field).__class__
 
     def initializeWidget(self):
         widget = QSpinBox()
         self._widget = widget
-        widget.setRange(0x00, 0x7f)
+        widget.setRange(self.modelClass._MIN, self.modelClass._MAX)
         widget.setSingleStep(1)
         self.updateState()
         widget.valueChanged.connect(self.updateModel)
@@ -25,7 +26,7 @@ class IntegerSelector:
         self._widget.setValue(getattr(self.model, self.fieldName).as_int())
     
     def updateModel(self):
-        setattr(self.model, self.fieldName, IntValue(self._widget.value()))
+        setattr(self.model, self.fieldName, self.modelClass(self._widget.value()))
 
 class EnumSelector:
 
