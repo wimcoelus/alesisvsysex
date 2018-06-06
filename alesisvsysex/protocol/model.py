@@ -10,27 +10,42 @@ class Keys (BasicComponent):
     _PARAMS = [
         ('transpose',   Transpose,  [0]),
         ('octave',      IntValue,   [0x05]),
-        ('channel',     IntValue,   [0x00]),
+        ('channel',     MIDIChannelEnum,   [0x00]),
         ('curve',       Curve,      [0x05])
     ]
 
 class PitchWheel (BasicComponent):
 
     _PARAMS = [
-        ('channel',     IntValue,   [0x00])
+        ('channel',     MIDIChannelEnum,   [0x00])
+    ]
+
+class VIPitchWheel (BasicComponent):
+
+    _PARAMS = [
+        ('channel',     MIDIChannelOmniEnum,   [0x00])
     ]
 
 class VMiniPitchWheel (BasicComponent):
 
     _PARAMS = [
-        ('channel',     IntValue,   [0x00]),
+        ('channel',     MIDIChannelEnum,   [0x00]),
         ('rate',        IntValue,   [0x50])
     ]
 
 class ModWheel (BasicComponent):
 
     _PARAMS = [
-        ('channel',     IntValue,   [0x00]),
+        ('channel',     MIDIChannelEnum,   [0x00]),
+        ('cc',          IntValue,   [0x01]),
+        ('min',         IntValue,   [0x00]),
+        ('max',         IntValue,   [0x7f])
+    ]
+
+class VIModWheel (BasicComponent):
+
+    _PARAMS = [
+        ('channel',     MIDIChannelOmniEnum,   [0x00]),
         ('cc',          IntValue,   [0x01]),
         ('min',         IntValue,   [0x00]),
         ('max',         IntValue,   [0x7f])
@@ -39,7 +54,7 @@ class ModWheel (BasicComponent):
 class VMiniModWheel (BasicComponent):
 
     _PARAMS = [
-        ('channel',     IntValue,   [0x00]),
+        ('channel',     MIDIChannelEnum,   [0x00]),
         ('cc',          IntValue,   [0x01]),
         ('min',         IntValue,   [0x00]),
         ('max',         IntValue,   [0x7f]),
@@ -52,7 +67,7 @@ class Sustain (BasicComponent):
         ('cc',          IntValue,   [0x40]),
         ('min',         IntValue,   [0x00]),
         ('max',         IntValue,   [0x7f]),
-        ('channel',     IntValue,   [0x00])
+        ('channel',     MIDIChannelEnum,   [0x00])
     ]
 
 class VISustain (BasicComponent):
@@ -61,7 +76,7 @@ class VISustain (BasicComponent):
         ('cc',          IntValue,   [0x40]),
         ('pressed',     IntValue,   [0x7f]),
         ('released',    IntValue,   [0x00]),
-        ('channel',     IntValue,   [0x00])
+        ('channel',     MIDIChannelEnum,   [0x00])
     ]
 
 class VMiniSustain (BasicComponent):
@@ -71,7 +86,7 @@ class VMiniSustain (BasicComponent):
         ('cc',          IntValue,   [0x40]),
         ('min',         IntValue,   [0x00]),
         ('max',         IntValue,   [0x7f]),
-        ('channel',     IntValue,   [0x00])
+        ('channel',     MIDIChannelEnum,   [0x00])
     ]
 
 class Knob (BasicComponent):
@@ -81,7 +96,7 @@ class Knob (BasicComponent):
         ('cc',          IntValue,       [0xff]), # intentionally invalid
         ('min',         IntValue,       [0x00]),
         ('max',         IntValue,       [0x7f]),
-        ('channel',     IntValue,       [0x00])
+        ('channel',     MIDIChannelEnum,       [0x00])
     ]
     
 class Knobs (CompoundComponent):
@@ -117,7 +132,7 @@ class Pad (BasicComponent):
         ('note',    IntValue,       [0xff]), # intentionally invalid
         ('fixed',   IntValue,       [0x00]),
         ('curve',   Curve,          [0x01]),
-        ('channel', IntValue,       [0x09])
+        ('channel', MIDIChannelEnum,       [0x09])
     ]
 
 class Pads (CompoundComponent):
@@ -145,22 +160,22 @@ class VMiniPads (CompoundComponent):
 class VIPads (CompoundComponent):
 
     _COMPONENTS = [
-        ('pad1',  Pad, {'note': IntValue(0x30), 'channel': IntValue(0x00)}),
-        ('pad2',  Pad, {'note': IntValue(0x31), 'channel': IntValue(0x00)}),
-        ('pad3',  Pad, {'note': IntValue(0x32), 'channel': IntValue(0x00)}),
-        ('pad4',  Pad, {'note': IntValue(0x33), 'channel': IntValue(0x00)}),
-        ('pad5',  Pad, {'note': IntValue(0x2c), 'channel': IntValue(0x00)}),
-        ('pad6',  Pad, {'note': IntValue(0x2d), 'channel': IntValue(0x00)}),
-        ('pad7',  Pad, {'note': IntValue(0x2e), 'channel': IntValue(0x00)}),
-        ('pad8',  Pad, {'note': IntValue(0x2f), 'channel': IntValue(0x00)}),
-        ('pad9',  Pad, {'note': IntValue(0x28), 'channel': IntValue(0x00)}),
-        ('pad10', Pad, {'note': IntValue(0x29), 'channel': IntValue(0x00)}),
-        ('pad11', Pad, {'note': IntValue(0x2a), 'channel': IntValue(0x00)}),
-        ('pad12', Pad, {'note': IntValue(0x2b), 'channel': IntValue(0x00)}),
-        ('pad13', Pad, {'note': IntValue(0x24), 'channel': IntValue(0x00)}),
-        ('pad14', Pad, {'note': IntValue(0x25), 'channel': IntValue(0x00)}),
-        ('pad15', Pad, {'note': IntValue(0x26), 'channel': IntValue(0x00)}),
-        ('pad16', Pad, {'note': IntValue(0x27), 'channel': IntValue(0x00)}),
+        ('pad1',  Pad, {'note': IntValue(0x30), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad2',  Pad, {'note': IntValue(0x31), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad3',  Pad, {'note': IntValue(0x32), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad4',  Pad, {'note': IntValue(0x33), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad5',  Pad, {'note': IntValue(0x2c), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad6',  Pad, {'note': IntValue(0x2d), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad7',  Pad, {'note': IntValue(0x2e), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad8',  Pad, {'note': IntValue(0x2f), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad9',  Pad, {'note': IntValue(0x28), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad10', Pad, {'note': IntValue(0x29), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad11', Pad, {'note': IntValue(0x2a), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad12', Pad, {'note': IntValue(0x2b), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad13', Pad, {'note': IntValue(0x24), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad14', Pad, {'note': IntValue(0x25), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad15', Pad, {'note': IntValue(0x26), 'channel': MIDIChannelEnum(0x00)}),
+        ('pad16', Pad, {'note': IntValue(0x27), 'channel': MIDIChannelEnum(0x00)}),
     ]
 
 class Button (BasicComponent):
@@ -170,7 +185,7 @@ class Button (BasicComponent):
         ('cc',      IntValue,       [0xff]), # intentionally invalid
         ('on',      IntValue,       [0x7f]),
         ('off',     IntValue,       [0x00]),
-        ('channel', IntValue,       [0x00])
+        ('channel', MIDIChannelEnum,       [0x00])
     ]
 
 class Buttons (CompoundComponent):
@@ -385,8 +400,8 @@ class AlesisVI49 (AlesisModel):
         ('keys',      VIKeys,       {}),
         ('roll',      VIRoll,       {}),
         ('transport', Transport,    {}),
-        ('pwheel',    PitchWheel,   {}),
-        ('mwheel',    ModWheel,     {}),
+        ('pwheel',    VIPitchWheel, {}),
+        ('mwheel',    VIModWheel,   {}),
         ('sustain',   VISustain,    {}),
         ('knobs',     VI49Knobs,    {}),
         ('pads',      VIPads,       {}),

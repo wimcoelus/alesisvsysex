@@ -1,6 +1,6 @@
 import struct
 
-__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum', 'Transpose', 'Curve']
+__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum', 'MIDIChannelEnum', 'MIDIChannelOmniEnum', 'Transpose', 'Curve']
 
 class AbstractEnumValue (object):
 
@@ -98,6 +98,49 @@ class SusModeEnum (AbstractEnumValue):
     _VALUES = {
         'Switch':         0x00,
         'Momentary':    0x01
+    }
+
+class MIDIChannelEnum (AbstractEnumValue):
+
+    _VALUES = {
+        'Channel 1':  0x00,
+        'Channel 2':  0x01,
+        'Channel 3':  0x02,
+        'Channel 4':  0x03,
+        'Channel 5':  0x04,
+        'Channel 6':  0x05,
+        'Channel 7':  0x06,
+        'Channel 8':  0x07,
+        'Channel 9':  0x08,
+        'Channel 10': 0x09,
+        'Channel 11': 0x0a,
+        'Channel 12': 0x0b,
+        'Channel 13': 0x0c,
+        'Channel 14': 0x0d,
+        'Channel 15': 0x0e,
+        'Channel 16': 0x0f
+    }
+
+class MIDIChannelOmniEnum (AbstractEnumValue):
+
+    _VALUES = {
+        'Channel 1':  0x00,
+        'Channel 2':  0x01,
+        'Channel 3':  0x02,
+        'Channel 4':  0x03,
+        'Channel 5':  0x04,
+        'Channel 6':  0x05,
+        'Channel 7':  0x06,
+        'Channel 8':  0x07,
+        'Channel 9':  0x08,
+        'Channel 10': 0x09,
+        'Channel 11': 0x0a,
+        'Channel 12': 0x0b,
+        'Channel 13': 0x0c,
+        'Channel 14': 0x0d,
+        'Channel 15': 0x0e,
+        'Channel 16': 0x0f,
+        'Omni':       0x10
     }
 
 class Transpose(IntValue):
