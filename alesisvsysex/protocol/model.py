@@ -8,7 +8,7 @@ __all__ = ['AlesisModel', 'AlesisV25', 'AlesisVMini', 'AlesisVI49', 'Keys' , 'Pi
 class Keys (BasicComponent):
 
     _PARAMS = [
-        ('base_note',   IntValue,   [0x0c]),
+        ('transpose',   Transpose,  [0]),
         ('octave',      IntValue,   [0x05]),
         ('channel',     IntValue,   [0x00]),
         ('curve',       IntValue,   [0x04])

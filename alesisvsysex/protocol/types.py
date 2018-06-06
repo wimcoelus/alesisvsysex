@@ -1,6 +1,6 @@
 import struct
 
-__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum']
+__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum', 'Transpose']
 
 class AbstractEnumValue (object):
 
@@ -44,8 +44,9 @@ class AbstractEnumValue (object):
     
 class IntValue (object):
 
-    _MIN = 0
-    _MAX = 127
+    _MIN   = 0
+    _MAX   = 127
+    _DELTA = 0
 
     def __init__(self, val):
         if not isinstance(val, int):
@@ -60,7 +61,7 @@ class IntValue (object):
         return self._value
         
     def serialize(self):
-        return struct.pack('B', self.as_int())
+        return struct.pack('B', self.as_int() + self._DELTA)
         
     @classmethod
     def num_bytes(cls):
@@ -68,7 +69,7 @@ class IntValue (object):
     
     @classmethod
     def deserialize(cls, b):
-        return cls(int(b[0]))
+        return cls(int(b[0]) - cls._DELTA)
 
 class KnobModeEnum (AbstractEnumValue):
 
@@ -98,3 +99,9 @@ class SusModeEnum (AbstractEnumValue):
         'Switch':         0x00,
         'Momentary':    0x01
     }
+
+class Transpose(IntValue):
+
+    _MIN   = -12
+    _MAX   = 12
+    _DELTA = 12

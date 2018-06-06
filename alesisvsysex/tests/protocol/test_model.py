@@ -11,9 +11,21 @@ class TestModel(unittest.TestCase):
         with self.assertRaises(ValueError):
             IntValue(128)
 
+    def test_transpose_identity(self):
+        serialized_transpose = bytes([0x0c])
+        t = Transpose.deserialize(serialized_transpose)
+        assert t.serialize() == serialized_transpose
+
+    def test_transpose_range(self):
+        assert Transpose._MAX == 12
+        assert Transpose._MIN == -12
+
+    def test_transpose_delta(self):
+        assert Transpose(0).serialize() == b'\x0c'
+
     def test_keys_getattr(self):
         k = Keys(IntValue(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
-        assert k.base_note.as_int() == 0x01
+        assert k.transpose.as_int() == 0x01
         assert k.octave.as_int() == 0x02
         assert k.channel.as_int() == 0x03
         assert k.curve.as_int() == 0x04
@@ -29,7 +41,7 @@ class TestModel(unittest.TestCase):
     def test_keys_default_const(self):
         k = Keys()
         d = {kk: cls(*v) for kk, cls, v in k._PARAMS}
-        assert k.base_note.as_int() == d['base_note'].as_int()
+        assert k.transpose.as_int() == d['transpose'].as_int()
         assert k.octave.as_int() == d['octave'].as_int()
         assert k.channel.as_int() == d['channel'].as_int()
         assert k.curve.as_int() == d['curve'].as_int()
@@ -37,7 +49,7 @@ class TestModel(unittest.TestCase):
     def test_keys_kwarg_const(self):
         k = Keys(octave=IntValue(0x79))
         d = {kk: cls(*v) for kk, cls, v in k._PARAMS}
-        assert k.base_note.as_int() == d['base_note'].as_int()
+        assert k.transpose.as_int() == d['transpose'].as_int()
         assert k.octave.as_int() == 0x79
         assert k.channel.as_int() == d['channel'].as_int()
 
@@ -49,12 +61,12 @@ class TestModel(unittest.TestCase):
             assert True
 
     def test_keys_setattr(self):
-        k = Keys(IntValue(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
-        k.base_note = IntValue(0x8)
+        k = Keys(Transpose(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
+        k.transpose = Transpose(0x8)
         k.octave = IntValue(0x7)
         k.channel = IntValue(0x6)
         k.curve = IntValue(0x5)
-        assert k.base_note.as_int() == 0x8
+        assert k.transpose.as_int() == 0x8
         assert k.octave.as_int() == 0x7
         assert k.channel.as_int() == 0x6
         assert k.curve.as_int() == 0x5
@@ -70,7 +82,7 @@ class TestModel(unittest.TestCase):
     def test_keys_deserialize(self):
         b = bytes([0x0d, 0x0c, 0x0b, 0x0a])
         k = Keys.deserialize(b)
-        assert k.base_note.as_int() == 0x0d
+        assert k.transpose.as_int() == 0x01
         assert k.octave.as_int() == 0x0c
         assert k.channel.as_int() == 0x0b
         assert k.curve.as_int() == 0x0a
