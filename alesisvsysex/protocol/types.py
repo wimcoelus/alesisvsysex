@@ -44,10 +44,16 @@ class AbstractEnumValue (object):
     
 class IntValue (object):
 
+    _MIN = 0
+    _MAX = 127
+
     def __init__(self, val):
         if not isinstance(val, int):
             raise ValueError("Invalid type '%s', expected int."
                              % (val.__class__.__name__))
+        if not (self._MIN <= val <= self._MAX):
+            raise ValueError("Invalid value '%s', expected within %s and %s"
+                             % (val, self._MIN, self._MAX))
         self._value = val
 
     def as_int(self):

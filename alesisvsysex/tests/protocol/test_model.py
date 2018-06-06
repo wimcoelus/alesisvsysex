@@ -3,6 +3,14 @@ from alesisvsysex.protocol.types import *
 import unittest
 
 class TestModel(unittest.TestCase):
+    def test_intvalue_range(self):
+        assert IntValue._MAX == 127
+        assert IntValue._MIN == 0
+
+    def test_intvalue_range_enforcement(self):
+        with self.assertRaises(ValueError):
+            IntValue(128)
+
     def test_keys_getattr(self):
         k = Keys(IntValue(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
         assert k.base_note.as_int() == 0x01
