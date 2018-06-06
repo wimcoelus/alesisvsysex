@@ -38,11 +38,6 @@ class BasicWidget:
             self.initializeWidget()
         return self._widget
 
-    def setModel(self, model):
-        self.model = getattr(model, self.componentKey)
-        for c in self.children:
-            c.setModel(self.model)
-
 class CompoundWidget:
 
     def __init__(self, model, name, component_key):
@@ -83,8 +78,3 @@ class CompoundWidget:
         if self._widget is None:
             self.initializeWidget()
         return self._widget
-
-    def setModel(self, model):
-        self.model = getattr(model, self.componentKey)
-        for c in self.children:
-            c.setModel(self.model)

@@ -74,11 +74,6 @@ class EditorWidget:
     def widget(self):
         return self._widget
 
-    def setModel(self, model):
-        self.model = model
-        for c in self.children:
-            c.setModel(self.model)
-
 class AlesisVSysexApplication:
 
     def __init__(self, model):
@@ -136,10 +131,6 @@ class AlesisVSysexApplication:
         targetBottomRight = self.mainWindow.rect().bottomRight() + targetPosition
         if QApplication.desktop().availableGeometry(self.mainWindow).contains(targetBottomRight):
             self.mainWindow.move(targetPosition)
-
-    def setModel(self, model):
-        self.model = model
-        self.editorWidget.setModel(model)
 
     def showStatusMessage(self, message):
         self.statusBar.showMessage(message)

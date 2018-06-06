@@ -26,11 +26,6 @@ class IntegerSelector:
     
     def updateModel(self):
         setattr(self.model, self.fieldName, IntValue(self._widget.value()))
-    
-    def setModel(self, model):
-        self.model = model
-        if self._widget is not None:
-            self.updateState()
 
 class EnumSelector:
 
@@ -65,8 +60,3 @@ class EnumSelector:
 
     def updateModel(self):
         setattr(self.model, self.fieldName, self.enumClass(self._widget.currentData()))
-
-    def setModel(self, model):
-        self.model = model
-        if self._widget is not None:
-            self.updateState()
