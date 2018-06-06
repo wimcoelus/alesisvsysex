@@ -1,6 +1,6 @@
 import struct
 
-__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum', 'Transpose']
+__all__ = ['AbstractEnumValue', 'IntValue', 'KnobModeEnum', 'ButtonModeEnum', 'PadModeEnum', 'SusModeEnum', 'Transpose', 'Curve']
 
 class AbstractEnumValue (object):
 
@@ -105,3 +105,8 @@ class Transpose(IntValue):
     _MIN   = -12
     _MAX   = 12
     _DELTA = 12
+
+class Curve(IntValue):
+    _MIN   = 1
+    _MAX   = 8
+    _DELTA = -1

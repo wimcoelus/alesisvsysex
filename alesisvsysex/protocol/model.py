@@ -11,7 +11,7 @@ class Keys (BasicComponent):
         ('transpose',   Transpose,  [0]),
         ('octave',      IntValue,   [0x05]),
         ('channel',     IntValue,   [0x00]),
-        ('curve',       IntValue,   [0x04])
+        ('curve',       Curve,      [0x05])
     ]
 
 class PitchWheel (BasicComponent):
@@ -116,7 +116,7 @@ class Pad (BasicComponent):
         ('mode',    PadModeEnum,    [0x00]),
         ('note',    IntValue,       [0xff]), # intentionally invalid
         ('fixed',   IntValue,       [0x00]),
-        ('curve',   IntValue,       [0x00]),
+        ('curve',   Curve,          [0x01]),
         ('channel', IntValue,       [0x09])
     ]
 
