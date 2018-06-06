@@ -24,7 +24,7 @@ class TestModel(unittest.TestCase):
         assert Transpose(0).serialize() == b'\x0c'
 
     def test_keys_getattr(self):
-        k = Keys(IntValue(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
+        k = Keys(IntValue(0x01), Octave(0x02), IntValue(0x03), IntValue(0x04))
         assert k.transpose.as_int() == 0x01
         assert k.octave.as_int() == 0x02
         assert k.channel.as_int() == 0x03
@@ -47,10 +47,10 @@ class TestModel(unittest.TestCase):
         assert k.curve.as_int() == d['curve'].as_int()
 
     def test_keys_kwarg_const(self):
-        k = Keys(octave=IntValue(0x79))
+        k = Keys(octave=Octave(9))
         d = {kk: cls(*v) for kk, cls, v in k._PARAMS}
         assert k.transpose.as_int() == d['transpose'].as_int()
-        assert k.octave.as_int() == 0x79
+        assert k.octave.as_int() == 9
         assert k.channel.as_int() == d['channel'].as_int()
 
     def test_keys_bad_kwarg_const(self):
@@ -80,23 +80,23 @@ class TestModel(unittest.TestCase):
         assert k.serialize() == bytes([0x0a, 0x0b, 0x0c, 0x0d])
 
     def test_keys_deserialize(self):
-        b = bytes([0x0d, 0x0c, 0x0b, 0x03])
+        b = bytes([0x0d, 0x02, 0x0b, 0x03])
         k = Keys.deserialize(b)
         assert k.transpose.as_int() == 0x01
-        assert k.octave.as_int() == 0x0c
+        assert k.octave.as_int() == 0x02
         assert k.channel.as_int() == 0x0b
         assert k.curve.as_int() == 0x04
 
     def test_keys_copy(self):
-        k1 = Keys(octave=IntValue(0x00))
+        k1 = Keys(octave=Octave(0x00))
         k2 = k1.copy()
         assert k2.octave.as_int() == 0x00
     
-        k1.octave = IntValue(0x02)
+        k1.octave = Octave(0x02)
         assert k1.octave.as_int() == 0x02
         assert k2.octave.as_int() == 0x00
     
-        k2.octave = IntValue(0x05)
+        k2.octave = Octave(0x05)
         assert k1.octave.as_int() == 0x02
         assert k2.octave.as_int() == 0x05
 

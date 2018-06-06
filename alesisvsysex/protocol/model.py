@@ -9,7 +9,16 @@ class Keys (BasicComponent):
 
     _PARAMS = [
         ('transpose',   Transpose,  [0]),
-        ('octave',      IntValue,   [0x05]),
+        ('octave',      Octave,   [0x05]),
+        ('channel',     MIDIChannelEnum,   [0x00]),
+        ('curve',       Curve,      [0x05])
+    ]
+
+class VMiniKeys (BasicComponent):
+
+    _PARAMS = [
+        ('transpose',   Transpose,  [0]),
+        ('octave',      VMiniOctave,   [0]),
         ('channel',     MIDIChannelEnum,   [0x00]),
         ('curve',       Curve,      [0x05])
     ]
@@ -279,10 +288,10 @@ class KeySplit (BasicComponent):
 class VIKeys (CompoundComponent):
 
     _COMPONENTS = [
-        ('keybed', Keys, {'octave': IntValue(0x03)}),
+        ('keybed', Keys, {'octave': Octave(0x03)}),
         ('split', KeySplit, {}),
-        ('lower_keybed', Keys, {'octave': IntValue(0x03)}),
-        ('upper_keybed', Keys, {'octave': IntValue(0x03)})
+        ('lower_keybed', Keys, {'octave': Octave(0x03)}),
+        ('upper_keybed', Keys, {'octave': Octave(0x03)})
     ]
 
 class VIRoll (BasicComponent):
@@ -370,7 +379,7 @@ class AlesisVMini (AlesisModel):
     _DEVICE_ID   = [0x00, 0x49]
 
     _COMPONENTS = [
-        ('keys',    Keys,       {}),
+        ('keys',    VMiniKeys,       {}),
         ('pwheel',  VMiniPitchWheel, {}),
         ('mwheel',  VMiniModWheel,   {}),
         ('sustain', VMiniSustain,    {}),
