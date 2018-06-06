@@ -27,10 +27,10 @@ class TestModel(unittest.TestCase):
         assert k.curve.as_int() == d['curve'].as_int()
 
     def test_keys_kwarg_const(self):
-        k = Keys(octave=IntValue(0x99))
+        k = Keys(octave=IntValue(0x79))
         d = {kk: cls(*v) for kk, cls, v in k._PARAMS}
         assert k.base_note.as_int() == d['base_note'].as_int()
-        assert k.octave.as_int() == 0x99
+        assert k.octave.as_int() == 0x79
         assert k.channel.as_int() == d['channel'].as_int()
 
     def test_keys_bad_kwarg_const(self):
@@ -42,14 +42,14 @@ class TestModel(unittest.TestCase):
 
     def test_keys_setattr(self):
         k = Keys(IntValue(0x01), IntValue(0x02), IntValue(0x03), IntValue(0x04))
-        k.base_note = IntValue(0xaa)
-        k.octave = IntValue(0xbb)
-        k.channel = IntValue(0xcc)
-        k.curve = IntValue(0xdd)
-        assert k.base_note.as_int() == 0xaa
-        assert k.octave.as_int() == 0xbb
-        assert k.channel.as_int() == 0xcc
-        assert k.curve.as_int() == 0xdd
+        k.base_note = IntValue(0x8)
+        k.octave = IntValue(0x7)
+        k.channel = IntValue(0x6)
+        k.curve = IntValue(0x5)
+        assert k.base_note.as_int() == 0x8
+        assert k.octave.as_int() == 0x7
+        assert k.channel.as_int() == 0x6
+        assert k.curve.as_int() == 0x5
 
     def test_keys_num_bytes(self):
         k = Keys()
@@ -72,13 +72,13 @@ class TestModel(unittest.TestCase):
         k2 = k1.copy()
         assert k2.octave.as_int() == 0x00
     
-        k1.octave = IntValue(0xaa)
-        assert k1.octave.as_int() == 0xaa
+        k1.octave = IntValue(0x02)
+        assert k1.octave.as_int() == 0x02
         assert k2.octave.as_int() == 0x00
     
-        k2.octave = IntValue(0xbb)
-        assert k1.octave.as_int() == 0xaa
-        assert k2.octave.as_int() == 0xbb
+        k2.octave = IntValue(0x05)
+        assert k1.octave.as_int() == 0x02
+        assert k2.octave.as_int() == 0x05
 
     def test_knobs_default_const(self):
         k = Knobs()
@@ -92,15 +92,15 @@ class TestModel(unittest.TestCase):
                                        0x00, 0x17, 0x00, 0x7f, 0x00])
 
     def test_knobs_deserialize(self):
-        b = bytes([0x00, 0xaa, 0x00, 0x7f, 0x00,
-                   0x00, 0xbb, 0x00, 0x7f, 0x00,
-                   0x00, 0xcc, 0x00, 0x7f, 0x00,
-                   0x00, 0xdd, 0x00, 0x7f, 0x00])
+        b = bytes([0x00, 0x7a, 0x00, 0x7f, 0x00,
+                   0x00, 0x7b, 0x00, 0x7f, 0x00,
+                   0x00, 0x7c, 0x00, 0x7f, 0x00,
+                   0x00, 0x7d, 0x00, 0x7f, 0x00])
         k = Knobs.deserialize(b)
-        assert k.knob1.cc.as_int() == 0xaa
-        assert k.knob2.cc.as_int() == 0xbb
-        assert k.knob3.cc.as_int() == 0xcc
-        assert k.knob4.cc.as_int() == 0xdd
+        assert k.knob1.cc.as_int() == 0x7a
+        assert k.knob2.cc.as_int() == 0x7b
+        assert k.knob3.cc.as_int() == 0x7c
+        assert k.knob4.cc.as_int() == 0x7d
 
     def test_knobs_copy(self):
         k1 = Knobs()
