@@ -134,6 +134,27 @@ class VI49Knobs (CompoundComponent):
         ('knob12', Knob, {'cc': IntValue(0x1f)})
     ]
 
+class VI61Knobs (CompoundComponent):
+
+    _COMPONENTS = [
+        ('knob1',  Knob, {'cc': IntValue(0x14)}),
+        ('knob2',  Knob, {'cc': IntValue(0x15)}),
+        ('knob3',  Knob, {'cc': IntValue(0x16)}),
+        ('knob4',  Knob, {'cc': IntValue(0x17)}),
+        ('knob5',  Knob, {'cc': IntValue(0x18)}),
+        ('knob6',  Knob, {'cc': IntValue(0x19)}),
+        ('knob7',  Knob, {'cc': IntValue(0x1a)}),
+        ('knob8',  Knob, {'cc': IntValue(0x1b)}),
+        ('knob9',  Knob, {'cc': IntValue(0x1c)}),
+        ('knob10', Knob, {'cc': IntValue(0x1d)}),
+        ('knob11', Knob, {'cc': IntValue(0x1e)}),
+        ('knob12', Knob, {'cc': IntValue(0x1f)}),
+        ('knob13', Knob, {'cc': IntValue(0x23)}),
+        ('knob14', Knob, {'cc': IntValue(0x29)}),
+        ('knob15', Knob, {'cc': IntValue(0x2e)}),
+        ('knob16', Knob, {'cc': IntValue(0x2f)})
+    ]
+
 class Pad (BasicComponent):
 
     _PARAMS = [
@@ -255,6 +276,69 @@ class VI49Switches3 (CompoundComponent):
         ('button34', Button, {'cc': IntValue(0x59)}),
         ('button35', Button, {'cc': IntValue(0x5a)}),
         ('button36', Button, {'cc': IntValue(0x5b)})
+    ]
+
+class VI61Switches (CompoundComponent):
+
+    _COMPONENTS = [
+        ('button1', Button, {'cc': IntValue(0x30)}),
+        ('button2', Button, {'cc': IntValue(0x31)}),
+        ('button3', Button, {'cc': IntValue(0x32)}),
+        ('button4', Button, {'cc': IntValue(0x33)}),
+        ('button5', Button, {'cc': IntValue(0x34)}),
+        ('button6', Button, {'cc': IntValue(0x35)}),
+        ('button7', Button, {'cc': IntValue(0x36)}),
+        ('button8', Button, {'cc': IntValue(0x37)}),
+        ('button9', Button, {'cc': IntValue(0x38)}),
+        ('button10', Button, {'cc': IntValue(0x39)}),
+        ('button11', Button, {'cc': IntValue(0x3a)}),
+        ('button12', Button, {'cc': IntValue(0x3b)}),
+        ('button13', Button, {'cc': IntValue(0x3c)}),
+        ('button14', Button, {'cc': IntValue(0x3d)}),
+        ('button15', Button, {'cc': IntValue(0x3e)}),
+        ('button16', Button, {'cc': IntValue(0x3f)}),
+    ]
+
+class VI61Switches2 (CompoundComponent):
+
+    _COMPONENTS = [
+        ('button17', Button, {'cc': IntValue(0x40)}),
+        ('button18', Button, {'cc': IntValue(0x41)}),
+        ('button19', Button, {'cc': IntValue(0x42)}),
+        ('button20', Button, {'cc': IntValue(0x43)}),
+        ('button21', Button, {'cc': IntValue(0x44)}),
+        ('button22', Button, {'cc': IntValue(0x45)}),
+        ('button23', Button, {'cc': IntValue(0x46)}),
+        ('button24', Button, {'cc': IntValue(0x47)}),
+        ('button25', Button, {'cc': IntValue(0x48)}),
+        ('button26', Button, {'cc': IntValue(0x49)}),
+        ('button27', Button, {'cc': IntValue(0x4a)}),
+        ('button28', Button, {'cc': IntValue(0x4b)}),
+        ('button29', Button, {'cc': IntValue(0x4c)}),
+        ('button30', Button, {'cc': IntValue(0x4d)}),
+        ('button31', Button, {'cc': IntValue(0x4e)}),
+        ('button32', Button, {'cc': IntValue(0x4f)}),
+    ]
+
+class VI61Switches3 (CompoundComponent):
+
+    _COMPONENTS = [
+        ('button33', Button, {'cc': IntValue(0x50)}),
+        ('button34', Button, {'cc': IntValue(0x51)}),
+        ('button35', Button, {'cc': IntValue(0x52)}),
+        ('button36', Button, {'cc': IntValue(0x53)}),
+        ('button37', Button, {'cc': IntValue(0x54)}),
+        ('button38', Button, {'cc': IntValue(0x55)}),
+        ('button39', Button, {'cc': IntValue(0x56)}),
+        ('button40', Button, {'cc': IntValue(0x57)}),
+        ('button41', Button, {'cc': IntValue(0x58)}),
+        ('button42', Button, {'cc': IntValue(0x59)}),
+        ('button43', Button, {'cc': IntValue(0x5a)}),
+        ('button44', Button, {'cc': IntValue(0x5b)}),
+        ('button45', Button, {'cc': IntValue(0x5c)}),
+        ('button46', Button, {'cc': IntValue(0x5d)}),
+        ('button47', Button, {'cc': IntValue(0x5e)}),
+        ('button48', Button, {'cc': IntValue(0x5f)})
     ]
 
 class VIUnknown (BasicComponent):
@@ -427,6 +511,50 @@ class AlesisVI49 (AlesisModel):
                ('Switches 13-24', 'vertical',
                 (('Switches', 'switches2'),)),
                ('Switches 25-36', 'vertical',
+                (('Switches', 'switches3'),)),
+               ('Pads', 'vertical',
+                (('Pads', 'pads'),)),
+               ('Roll', 'horizontal',
+                (('Roll', 'roll'),)),
+               ('Transport', 'vertical',
+                (('Transport', 'transport'),)),
+               ('Keys', 'vertical',
+                (('Keys', 'keys'),)),
+               ('Mod / Pitch', 'horizontal',
+                (('Mod Wheel', 'mwheel'),
+                 ('Pitch Wheel', 'pwheel'))),
+               ('Sustain', 'horizontal',
+                (('Sustain Pedal', 'sustain'),)))
+
+class AlesisVI61 (AlesisModel):
+
+    _PORT_PREFIX  = "VI61:VI61 MIDI 2"
+    _DEVICE_ID    = [0x00, 0x40]
+    _SLOT_CONFIG  = True
+
+    _COMPONENTS = [
+        ('unknown',   VIUnknown,    {}),
+        ('keys',      VIKeys,       {}),
+        ('roll',      VIRoll,       {}),
+        ('transport', Transport,    {}),
+        ('pwheel',    VIPitchWheel, {}),
+        ('mwheel',    VIModWheel,   {}),
+        ('sustain',   VISustain,    {}),
+        ('knobs',     VI61Knobs,    {}),
+        ('pads',      VIPads,       {}),
+        ('switches',  VI61Switches, {}),
+        ('switches2',  VI61Switches2, {}),
+        ('switches3',  VI61Switches3, {}),
+        ('midi2din',  VIMIDI2DIN,   {})
+    ]
+
+    _GROUPS = (('Knobs', 'vertical',
+                (('Knobs', 'knobs'),)),
+               ('Switches 1-16', 'vertical',
+                (('Switches', 'switches'),)),
+               ('Switches 17-32', 'vertical',
+                (('Switches', 'switches2'),)),
+               ('Switches 33-48', 'vertical',
                 (('Switches', 'switches3'),)),
                ('Pads', 'vertical',
                 (('Pads', 'pads'),)),
