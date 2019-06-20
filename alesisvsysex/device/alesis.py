@@ -1,3 +1,4 @@
+import time
 import mido
 from alesisvsysex.protocol.sysex import SysexMessage
 from alesisvsysex.protocol.model import AlesisModel
@@ -75,3 +76,19 @@ class AlesisMIDIDevice (object):
         config = model.serialize()
         for offset in range(model.num_bytes()):
             self._send(SysexMessage('slot_update', model, slot, offset, config[offset]))
+            # KLUDGE: The VI61 (and possibly other devices) don't
+            # appear to like getting more than one update message per
+            # USB packet...  Or it might be that they don't like
+            # having two-and-a-bit, with the rest in the next packet.
+            # This should be easy to accommodate: The Linux kernel
+            # driver provides SNDRV_RAWMIDI_IOCTL_DRAIN which waits
+            # until all pending MIDI output has been sent, which is
+            # exposed by libalsa as snd_rawmidi_drain().  But we're
+            # using mido, which uses python_rtmidi, which uses RtMidi,
+            # which DOESN'T expose this functionality.  I'm sure that
+            # there's a very good reason why not.  As a workaround,
+            # since RtMidi sends messages "immediately", we sleep for
+            # two milliseconds after each packet, being twice the
+            # primary USB clock, in the hopes that it is sufficient to
+            # clear the pending queue before we add to it.
+            time.sleep(0.002)
