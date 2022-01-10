@@ -3,7 +3,7 @@ import struct
 from alesisvsysex.protocol.types import *
 from alesisvsysex.protocol.component import *
 
-__all__ = ['AlesisModel', 'AlesisV25', 'AlesisVMini', 'AlesisVI49', 'Keys' , 'PitchWheel', 'VMiniPitchWheel', 'ModWheel', 'VMiniModWheel', 'Sustain', 'VMiniSustain', 'Knob', 'Knobs', 'Pad', 'Pads', 'VMiniPads', 'Button', 'Buttons']
+__all__ = ['AlesisModel', 'AlesisV25', 'AlesisVMini', 'AlesisVI25', 'AlesisVI49', 'Keys' , 'PitchWheel', 'VMiniPitchWheel', 'ModWheel', 'VMiniModWheel', 'Sustain', 'VMiniSustain', 'Knob', 'Knobs', 'Pad', 'Pads', 'VMiniPads', 'Button', 'Buttons']
 
 class Keys (BasicComponent):
 
@@ -132,6 +132,20 @@ class VI49Knobs (CompoundComponent):
         ('knob10', Knob, {'cc': IntValue(0x1d)}),
         ('knob11', Knob, {'cc': IntValue(0x1e)}),
         ('knob12', Knob, {'cc': IntValue(0x1f)})
+    ]
+    
+class VI25Knobs (CompoundComponent):
+  
+    _COMPONENTS = [
+        ('knob1',  Knob, {'cc': IntValue(0x14)}),
+        ('knob2',  Knob, {'cc': IntValue(0x15)}),
+        ('knob3',  Knob, {'cc': IntValue(0x16)}),
+        ('knob4',  Knob, {'cc': IntValue(0x17)}),
+        ('knob5',  Knob, {'cc': IntValue(0x18)}),
+        ('knob6',  Knob, {'cc': IntValue(0x19)}),
+        ('knob7',  Knob, {'cc': IntValue(0x1a)}),
+        ('knob8',  Knob, {'cc': IntValue(0x1b)}),
+        
     ]
 
 class VI61Knobs (CompoundComponent):
@@ -276,6 +290,46 @@ class VI49Switches3 (CompoundComponent):
         ('button34', Button, {'cc': IntValue(0x59)}),
         ('button35', Button, {'cc': IntValue(0x5a)}),
         ('button36', Button, {'cc': IntValue(0x5b)})
+    ]
+    
+class VI25Switches (CompoundComponent):
+  
+    _COMPONENTS = [
+        ('button1', Button, {'cc': IntValue(0x30)}),
+        ('button2', Button, {'cc': IntValue(0x31)}),
+        ('button3', Button, {'cc': IntValue(0x32)}),
+        ('button4', Button, {'cc': IntValue(0x33)}),
+        ('button5', Button, {'cc': IntValue(0x34)}),
+        ('button6', Button, {'cc': IntValue(0x35)}),
+        ('button7', Button, {'cc': IntValue(0x36)}),
+        ('button8', Button, {'cc': IntValue(0x37)}),
+        
+    ]
+
+class VI25Switches2 (CompoundComponent):
+
+    _COMPONENTS = [
+        ('button9', Button, {'cc': IntValue(0x38)}),
+        ('button10', Button, {'cc': IntValue(0x39)}),
+        ('button11', Button, {'cc': IntValue(0x3a)}),
+        ('button12', Button, {'cc': IntValue(0x3b)}),
+        ('button13', Button, {'cc': IntValue(0x3c)}),
+        ('button14', Button, {'cc': IntValue(0x3d)}),
+        ('button15', Button, {'cc': IntValue(0x3e)}),
+        ('button16', Button, {'cc': IntValue(0x3f)}),
+    ]
+
+class VI25Switches3 (CompoundComponent):
+    
+    _COMPONENTS = [
+        ('button17', Button, {'cc': IntValue(0x40)}),
+        ('button18', Button, {'cc': IntValue(0x41)}),
+        ('button19', Button, {'cc': IntValue(0x42)}),
+        ('button20', Button, {'cc': IntValue(0x43)}),
+        ('button21', Button, {'cc': IntValue(0x44)}),
+        ('button22', Button, {'cc': IntValue(0x45)}),
+        ('button23', Button, {'cc': IntValue(0x46)}),
+        ('button24', Button, {'cc': IntValue(0x47)}),
     ]
 
 class VI61Switches (CompoundComponent):
@@ -481,6 +535,50 @@ class AlesisVMini (AlesisModel):
                ('Pads', 'vertical',
                 (('Pads', 'pads'),)))
 
+class AlesisVI25 (AlesisModel):
+  
+    _PORT_PREFIX  = "VI25:VI25 MIDI 2"
+    _DEVICE_ID    = [0x00, 0x3f]
+    _SLOT_CONFIG  = True
+    _LENGTH_DELTA = 0x50
+
+    _COMPONENTS = [
+        ('unknown',   VIUnknown,    {}),
+        ('keys',      VIKeys,       {}),
+        ('roll',      VIRoll,       {}),
+        ('transport', Transport,    {}),
+        ('pwheel',    VIPitchWheel, {}),
+        ('mwheel',    VIModWheel,   {}),
+        ('sustain',   VISustain,    {}),
+        ('knobs',     VI25Knobs,    {}),
+        ('pads',      VIPads,       {}),
+        ('switches',  VI25Switches, {}),
+        ('switches2',  VI25Switches2, {}),
+        ('switches3',  VI25Switches3, {}),
+        ('midi2din',  VIMIDI2DIN,   {})
+    ]
+
+    _GROUPS = (('Knobs', 'vertical',
+                (('Knobs', 'knobs'),)),
+               ('Switches 1-8', 'vertical',
+                (('Switches', 'switches'),)),
+               ('Switches 9-16', 'vertical',
+                (('Switches', 'switches2'),)),
+               ('Switches 17-24', 'vertical',
+                (('Switches', 'switches3'),)),
+               ('Pads', 'vertical',
+                (('Pads', 'pads'),)),
+               ('Roll', 'horizontal',
+                (('Roll', 'roll'),)),
+               ('Transport', 'vertical',
+                (('Transport', 'transport'),)),
+               ('Keys', 'vertical',
+                (('Keys', 'keys'),)),
+               ('Mod / Pitch', 'horizontal',
+                (('Mod Wheel', 'mwheel'),
+                 ('Pitch Wheel', 'pwheel'))),
+               ('Sustain', 'horizontal',
+                (('Sustain Pedal', 'sustain'),)))
 class AlesisVI49 (AlesisModel):
 
     _PORT_PREFIX  = "VI49:VI49 MIDI 2"
